@@ -25,60 +25,56 @@ function App() {
     5: process.env.REACT_APP_ROOM5_URL,
     6: process.env.REACT_APP_ROOM6_URL,
     7: process.env.REACT_APP_ROOM7_URL,
-};
-
-useEffect(() => {
-  const fetchEvents = async () => {
-      try {
-          const response = await fetch(`http://localhost:3000/schedule/room${number}`);
-          if (!response.ok) {
-              throw new Error('Ошибка при загрузке событий');
-          }
-
-          const data = await response.json();
-          console.log('Полученные данные:', data); // Проверка данных
-
-          // Форматируем события
-          const formattedEvents = data.map(event => ({
-              title: event.title,
-              start: new Date(event.start), // Преобразуем в Date
-              end: new Date(event.end), // Преобразуем в Date
-          }));
-
-          setEvents(formattedEvents); // Устанавливаем отформатированные события
-
-          if (check === 'true') {
-              const now = new Date();
-              const currentEvent = formattedEvents.find(event => now >= event.start && now <= event.end);
-              if (currentEvent) {
-                  const join = window.confirm(`Сейчас проходит: ${currentEvent.title}. Хотите присоединиться?`);
-                  if (join) {
-                      const roomUrl = roomUrls[number]; 
-                      if (roomUrl) {
-                          window.location.href = roomUrl;
-                      } else {
-                          alert('Ссылка для этой комнаты недоступна.');
-                      }
-                  }
-              }
-          }
-      } catch (error) {
-          console.error('Ошибка:', error);
-          alert('Не удалось загрузить события с сервера');
-      }
   };
 
-  fetchEvents();
-}, [number, check]);
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/schedule/room${number}`);
+        if (!response.ok) {
+          throw new Error('Ошибка при загрузке событий');
+        }
+
+        const data = await response.json();
+        const formattedEvents = data.map(event => ({
+          title: event.title,
+          start: new Date(event.start),
+          end: new Date(event.end),
+          id: event.id, // Предполагаем, что события имеют уникальный идентификатор
+        }));
+
+        setEvents(formattedEvents);
+
+        if (check === 'true') {
+          const now = new Date();
+          const currentEvent = formattedEvents.find(event => now >= event.start && now <= event.end);
+          if (currentEvent) {
+            const join = window.confirm(`Сейчас проходит: ${currentEvent.title}. Хотите присоединиться?`);
+            if (join) {
+              const roomUrl = roomUrls[number];
+              if (roomUrl) {
+                window.location.href = roomUrl;
+              } else {
+                alert('Ссылка для этой комнаты недоступна.');
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Ошибка:', error);
+        alert('Не удалось загрузить события с сервера');
+      }
+    };
+
+    fetchEvents();
+  }, [number, check]);
 
   // Функция для добавления события
   const handleAddEvent = async () => {
     const start = new Date(eventStart);
     const end = new Date(eventEnd);
 
-    // Обновляем локальное состояние
     const newEvent = { title: eventTitle, start, end };
-    setEvents([...events, newEvent]);
 
     // Отправляем POST запрос на сервер для сохранения события
     try {
@@ -88,7 +84,7 @@ useEffect(() => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(newEvent),
-      });
+    });
 
       if (!response.ok) {
         throw new Error('Ошибка при добавлении события на сервер');
@@ -96,6 +92,9 @@ useEffect(() => {
 
       const result = await response.json();
       console.log('Событие добавлено на сервер:', result);
+
+      // Добавление события в состояние приложения
+      setEvents([...events, { ...newEvent, id: result.id }]);
     } catch (error) {
       console.error('Ошибка:', error);
       alert('Не удалось добавить событие на сервер');
@@ -107,15 +106,46 @@ useEffect(() => {
     setEventEnd('');
   };
 
-  // Функция для проверки текущего события
-  const checkCurrentEvent = () => {
-    const now = new Date();
-    const currentEvent = events.find(event => now >= new Date(event.start) && now <= new Date(event.end));
-    if (currentEvent) {
-      alert(`Сейчас происходит: ${currentEvent.title}`);
-    } else {
-      alert('Нет текущих событий.');
+  // Функция для удаления события
+  const handleDeleteEvent = async (eventToDelete) => {
+    if (window.confirm('Вы уверены, что хотите удалить это событие?')) {
+      // Запрос к серверу для удаления события
+      try {
+        const response = await fetch(`http://localhost:3000/schedule/room${number}/${eventToDelete.id}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          throw new Error('Ошибка при удалении события на сервере');
+        }
+
+        // Обновление состояния events после удаления
+        setEvents(events.filter(event => event.id !== eventToDelete.id));
+      } catch (error) {
+        console.error('Ошибка:', error);
+        alert('Не удалось удалить событие на сервере');
+      }
     }
+  };
+
+  // Обертка для отрисовки событий
+  const eventStyleGetter = (event) => {
+    const style = {
+      backgroundColor: '#3174ad',
+      border: 'none',
+      color: 'white',
+      borderRadius: '5px',
+      padding: '10px',
+      cursor: 'pointer', // Меняем курсор для индикации интерактивности
+    };
+    return {
+      style,
+    };
+  };
+
+  // Функция для обработки нажатия на событие
+  const handleEventClick = (event) => {
+    handleDeleteEvent(event);
   };
 
   return (
@@ -144,13 +174,14 @@ useEffect(() => {
         />
         <button type="submit">Добавить событие</button>
       </form>
-      <button onClick={checkCurrentEvent}>Проверить текущее событие</button>
       <Calendar
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: 500, margin: '50px' }}
+        style={{ height: 500, margin: '25px' }}
+        eventPropGetter={eventStyleGetter}
+        onSelectEvent={handleEventClick} // Удаляем событие по клику на событие
       />
     </div>
   );
