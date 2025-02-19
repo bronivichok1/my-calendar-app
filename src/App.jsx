@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import 'moment/locale/ru'; 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useLocation } from 'react-router-dom';
 
@@ -8,10 +9,9 @@ const localizer = momentLocalizer(moment);
 
 function App() {
   const query = new URLSearchParams(useLocation().search);
-  const number = query.get('number') || "1"; // Получаем значение параметра "number"
-  const check = query.get('check') || 'true'; // Получаем значение параметра "check"
+  const number = query.get('num') || "1";
+  const check = query.get('ch') || 'false';
 
-  // Состояние для хранения событий
   const [events, setEvents] = useState([]);
   const [eventTitle, setEventTitle] = useState('');
   const [eventStart, setEventStart] = useState('');
@@ -34,17 +34,14 @@ function App() {
         if (!response.ok) {
           throw new Error('Ошибка при загрузке событий');
         }
-
         const data = await response.json();
         const formattedEvents = data.map(event => ({
           title: event.title,
           start: new Date(event.start),
           end: new Date(event.end),
-          id: event.id, // Предполагаем, что события имеют уникальный идентификатор
+          id: event.id, 
         }));
-
         setEvents(formattedEvents);
-
         if (check === 'true') {
           const now = new Date();
           const currentEvent = formattedEvents.find(event => now >= event.start && now <= event.end);
@@ -65,18 +62,14 @@ function App() {
         alert('Не удалось загрузить события с сервера');
       }
     };
-
     fetchEvents();
   }, [number, check]);
 
-  // Функция для добавления события
   const handleAddEvent = async () => {
     const start = new Date(eventStart);
     const end = new Date(eventEnd);
-
     const newEvent = { title: eventTitle, start, end };
 
-    // Отправляем POST запрос на сервер для сохранения события
     try {
       const response = await fetch(`http://localhost:3000/schedule/room${number}`, {
         method: 'POST',
@@ -84,42 +77,32 @@ function App() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(newEvent),
-    });
-
+      });
       if (!response.ok) {
         throw new Error('Ошибка при добавлении события на сервер');
       }
-
       const result = await response.json();
       console.log('Событие добавлено на сервер:', result);
-
-      // Добавление события в состояние приложения
       setEvents([...events, { ...newEvent, id: result.id }]);
     } catch (error) {
       console.error('Ошибка:', error);
       alert('Не удалось добавить событие на сервер');
     }
 
-    // Очистить поля формы
     setEventTitle('');
     setEventStart('');
     setEventEnd('');
   };
 
-  // Функция для удаления события
   const handleDeleteEvent = async (eventToDelete) => {
     if (window.confirm('Вы уверены, что хотите удалить это событие?')) {
-      // Запрос к серверу для удаления события
       try {
         const response = await fetch(`http://localhost:3000/schedule/room${number}/${eventToDelete.id}`, {
           method: 'DELETE',
         });
-
         if (!response.ok) {
           throw new Error('Ошибка при удалении события на сервере');
         }
-
-        // Обновление состояния events после удаления
         setEvents(events.filter(event => event.id !== eventToDelete.id));
       } catch (error) {
         console.error('Ошибка:', error);
@@ -128,7 +111,6 @@ function App() {
     }
   };
 
-  // Обертка для отрисовки событий
   const eventStyleGetter = (event) => {
     const style = {
       backgroundColor: '#3174ad',
@@ -136,24 +118,21 @@ function App() {
       color: 'white',
       borderRadius: '5px',
       padding: '10px',
-      cursor: 'pointer', // Меняем курсор для индикации интерактивности
+      cursor: 'pointer',
     };
-    return {
-      style,
-    };
+    return { style };
   };
 
-  // Функция для обработки нажатия на событие
   const handleEventClick = (event) => {
     handleDeleteEvent(event);
   };
 
   return (
     <div className="App">
-      <h1>Календарь событий</h1>
       <h2>Комната: {number}</h2>
       <form onSubmit={(e) => { e.preventDefault(); handleAddEvent(); }}>
         <input
+          className='input_1'
           type="text"
           placeholder="Название события"
           value={eventTitle}
@@ -181,7 +160,21 @@ function App() {
         endAccessor="end"
         style={{ height: 500, margin: '25px' }}
         eventPropGetter={eventStyleGetter}
-        onSelectEvent={handleEventClick} // Удаляем событие по клику на событие
+        onSelectEvent={handleEventClick}
+        messages={{
+          allDay: 'Весь день',
+          previous: '<',
+          next: '>',
+          today: 'Сегодня',
+          month: 'Месяц',
+          week: 'Неделя',
+          day: 'День',
+          agenda: 'Список',
+          date: 'Дата',
+          time: 'Время',
+          event: 'Событие',
+          showMore: (total) => `+ ещё ${total}`, // показывает, сколько событий осталось
+        }}
       />
     </div>
   );
