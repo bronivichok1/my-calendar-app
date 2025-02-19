@@ -26,11 +26,13 @@ function App() {
     6: process.env.REACT_APP_ROOM6_URL,
     7: process.env.REACT_APP_ROOM7_URL,
   };
+  const PATH = process.env.REACT_APP_API_URL;
+
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/schedule/room${number}`);
+        const response = await fetch(`${PATH}/schedule/room${number}`);
         if (!response.ok) {
           throw new Error('Ошибка при загрузке событий');
         }
