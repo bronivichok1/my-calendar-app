@@ -101,8 +101,8 @@ button {
   left: 0;
   z-index: -1;
   border-radius: 5px;
-  background-color: #218ccada;
-  background-image: linear-gradient(315deg, #218ccada 0%, #218ccada 74%);
+  background-color: rgb(49,116,173);
+  background-image: linear-gradient(315deg, #3174ad 0%, #3174ad 74%);
    box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5);
   transition: all 0.3s ease;
 }
