@@ -19,3 +19,170 @@ h2{
 .input_1{
   margin-left: 25px;
 }
+
+.input-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+
+.input-row input {
+  flex: 1; 
+  margin: 0 2%; 
+  font-size: 1.2em; 
+}
+
+.date-inputs {
+  display: flex;
+  justify-content: center; 
+  margin-bottom: 20px;
+  width: 100%; 
+}
+
+.date-input {
+  flex: 1; 
+  margin: 0 2%; 
+}
+
+.date-input label {
+  display: block; 
+  text-align: center; 
+  margin-bottom: 5px; 
+}
+
+.date-input input {
+  width: 100%; 
+  height: 25px;
+  font-size: 1em;
+  padding: 5px; 
+  box-sizing: border-box; 
+}
+
+
+.frame {
+  width: 90%;
+  margin: 0px auto;
+  text-align: center;
+}
+button {
+  margin: 20px;
+}
+.custom-btn {
+  border-width: 1px;
+  font-size: 16px;
+  width: 30%;
+  color: #000000;
+  border-color: #858080;
+  border-radius: 5px;
+  padding: 10px 25px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  outline: none;
+}
+
+.btn-14 {
+  background: rgba(188, 190, 188, 0.596);
+  z-index: 1;
+}
+.btn-14:after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 0;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  border-radius: 5px;
+  background-color: #218ccada;
+  background-image: linear-gradient(315deg, #218ccada 0%, #218ccada 74%);
+   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5);
+  transition: all 0.3s ease;
+}
+.btn-14:hover {
+  color: #000;
+}
+.btn-14:hover:after {
+  top: auto;
+  bottom: 0;
+  height: 100%;
+}
+.btn-14:active {
+  top: 2px;
+}
+
+.room-button {
+  background-color: #D0E6F1;
+  color: #2f5e94;
+  font-family: 'Roboto', sans-serif;
+  font-size: 22px; 
+  padding: 30px 20px; 
+  margin: 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.room-button:hover {
+  background-color: #F5A623;
+  color: white;
+}
+
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .rooms-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.rbc-event {
+  min-height: 40px; 
+  padding: 10px; 
+  font-size: 18px; 
+  white-space: normal; 
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  word-wrap: break-word; 
+  overflow-wrap: break-word; 
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+.rbc-time-slot {
+  width: 150px; 
+}
+
+.rbc-event:hover {
+  background-color: #4a90e2; 
+  color: white; 
+}
+
+.rbc-day-view .rbc-event,
+.rbc-week-view .rbc-event {
+  min-height: 20px; 
+  white-space: normal; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  margin: 2px 0; 
+  
+}
+
+.rbc-event {
+  display: flex; 
+  justify-content: center; 
+}
+.rbc-month-view .rbc-event {
+  white-space: nowrap; 
+  justify-content: left !important; 
+}

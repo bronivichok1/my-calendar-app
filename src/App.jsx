@@ -4,6 +4,7 @@ import moment from 'moment';
 import 'moment/locale/ru'; 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useLocation } from 'react-router-dom';
+import './index.css';
 
 const localizer = momentLocalizer(moment);
 
@@ -13,6 +14,7 @@ function App() {
   const check = query.get('ch') || 'false';
 
   const [events, setEvents] = useState([]);
+  const [eventName, setEventName] = useState('');
   const [eventTitle, setEventTitle] = useState('');
   const [eventStart, setEventStart] = useState('');
   const [eventEnd, setEventEnd] = useState('');
@@ -27,17 +29,18 @@ function App() {
     7: process.env.REACT_APP_ROOM7_URL,
   };
   const PATH = process.env.REACT_APP_API_URL;
-
-
+  
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch(`${PATH}/schedule/room${number}`);
+        const response = await fetch(`${PATH}/schedule/room/${number}`);
         if (!response.ok) {
           throw new Error('Ошибка при загрузке событий');
         }
         const data = await response.json();
         const formattedEvents = data.map(event => ({
+          number:parseInt(number,10),
+          name: event.name,
           title: event.title,
           start: new Date(event.start),
           end: new Date(event.end),
@@ -70,19 +73,32 @@ function App() {
   const handleAddEvent = async () => {
     const start = new Date(eventStart);
     const end = new Date(eventEnd);
-    const newEvent = { title: eventTitle, start, end };
-
+    const num = parseInt(number, 10);
+    const newEvent = { number: num, name: eventName, title: eventTitle, start, end };
+  
+    // Проверка на конфликт событий
+    const conflictingEvent = events.find(event =>
+      (start < event.end && end > event.start) // Проверяет, пересекается ли новый интервал с существующим
+    );
+  
+    if (conflictingEvent) {
+      alert(`В промежуток с ${moment(conflictingEvent.start).format('HH:mm')} до ${moment(conflictingEvent.end).format('HH:mm')} проходит "${conflictingEvent.title}", ведущий: ${conflictingEvent.name}.`);
+      return; // Прекратить выполнение функции, если есть конфликт
+    }
+  
     try {
-      const response = await fetch(`http://localhost:3000/schedule/room${number}`, {
+      const response = await fetch(PATH+`/schedule/room`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(newEvent),
       });
+  
       if (!response.ok) {
         throw new Error('Ошибка при добавлении события на сервер');
       }
+  
       const result = await response.json();
       console.log('Событие добавлено на сервер:', result);
       setEvents([...events, { ...newEvent, id: result.id }]);
@@ -90,8 +106,9 @@ function App() {
       console.error('Ошибка:', error);
       alert('Не удалось добавить событие на сервер');
     }
-
+  
     setEventTitle('');
+    setEventName('');
     setEventStart('');
     setEventEnd('');
   };
@@ -99,7 +116,7 @@ function App() {
   const handleDeleteEvent = async (eventToDelete) => {
     if (window.confirm('Вы уверены, что хотите удалить это событие?')) {
       try {
-        const response = await fetch(`http://localhost:3000/schedule/room${number}/${eventToDelete.id}`, {
+        const response = await fetch(PATH`/schedule/room/${eventToDelete.id}`, {
           method: 'DELETE',
         });
         if (!response.ok) {
@@ -121,9 +138,16 @@ function App() {
       borderRadius: '5px',
       padding: '10px',
       cursor: 'pointer',
+      height: 'auto', // Позволить высоту события авто
+      whiteSpace: 'normal', // Позволяет перенос
     };
-    return { style };
+    
+    return {
+      style,
+      title: `${event.title} - ${event.name}`, // Всплывающее окно с полным текстом
+    };
   };
+
 
   const handleEventClick = (event) => {
     handleDeleteEvent(event);
@@ -131,43 +155,70 @@ function App() {
 
   return (
     <div className="App">
-      <h2>Комната: {number}</h2>
-      <form onSubmit={(e) => { e.preventDefault(); handleAddEvent(); }}>
-        <input
-          className='input_1'
-          type="text"
-          placeholder="Название события"
-          value={eventTitle}
-          onChange={(e) => setEventTitle(e.target.value)}
-          required
-        />
-        <input
-          type="datetime-local"
-          value={eventStart}
-          onChange={(e) => setEventStart(e.target.value)}
-          required
-        />
-        <input
-          type="datetime-local"
-          value={eventEnd}
-          onChange={(e) => setEventEnd(e.target.value)}
-          required
-        />
-        <button type="submit">Добавить событие</button>
+      <h2 style={{ textAlign: 'center' }}>Комната номер: {number}</h2>
+      <form onSubmit={(e) => { e.preventDefault(); handleAddEvent(); }} style={{ textAlign: 'center' }}>
+        <div className="date-inputs">
+          <div className="date-input">
+            <label>Название мероприятия</label> 
+            <input
+              type="text"
+              placeholder="Название события"
+              value={eventTitle}
+              onChange={(e) => setEventTitle(e.target.value)}
+              required
+            />
+            </div>
+          <div className="date-input">
+            <label>ФИО</label> 
+            <input
+              type="text"
+              placeholder="Иванов И.И."
+              value={eventName} 
+              onChange={(e) => setEventName(e.target.value)} 
+              required
+            />
+          </div>
+        </div>
+
+        <div className="date-inputs">
+          <div className="date-input">
+            <label>Дата начала</label>
+            <input
+              type="datetime-local"
+              value={eventStart}
+              onChange={(e) => setEventStart(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="date-input">
+            <label>Дата окончания</label>
+            <input
+              type="datetime-local"
+              value={eventEnd}
+              onChange={(e) => setEventEnd(e.target.value)}
+              required
+            />
+          </div>
+        </div>
+        <div className="frame">
+          <button className="custom-btn btn-14" type="submit">Добавить</button>
+        </div>
       </form>
+
       <Calendar
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: 500, margin: '25px' }}
+        style={{ height: 650, margin: '25px' }}
         eventPropGetter={eventStyleGetter}
         onSelectEvent={handleEventClick}
         messages={{
           allDay: 'Весь день',
-          previous: '<',
-          next: '>',
-          today: 'Сегодня',
+          previous: 'Предыдущий',
+          next: 'Следующий',
+          today: 'Сейчас',
           month: 'Месяц',
           week: 'Неделя',
           day: 'День',
@@ -175,7 +226,7 @@ function App() {
           date: 'Дата',
           time: 'Время',
           event: 'Событие',
-          showMore: (total) => `+ ещё ${total}`, // показывает, сколько событий осталось
+          showMore: (total) => `+ ещё ${total}`, 
         }}
       />
     </div>
