@@ -76,14 +76,13 @@ function App() {
     const num = parseInt(number, 10);
     const newEvent = { number: num, name: eventName, title: eventTitle, start, end };
   
-    // Проверка на конфликт событий
     const conflictingEvent = events.find(event =>
-      (start < event.end && end > event.start) // Проверяет, пересекается ли новый интервал с существующим
+      (start < event.end && end > event.start) 
     );
   
     if (conflictingEvent) {
       alert(`В промежуток с ${moment(conflictingEvent.start).format('HH:mm')} до ${moment(conflictingEvent.end).format('HH:mm')} проходит "${conflictingEvent.title}", ведущий: ${conflictingEvent.name}.`);
-      return; // Прекратить выполнение функции, если есть конфликт
+      return; 
     }
   
     try {
@@ -138,16 +137,15 @@ function App() {
       borderRadius: '5px',
       padding: '10px',
       cursor: 'pointer',
-      height: 'auto', // Позволить высоту события авто
-      whiteSpace: 'normal', // Позволяет перенос
+      height: 'auto', 
+      whiteSpace: 'normal', 
     };
     
     return {
       style,
-      title: `${event.title} - ${event.name}`, // Всплывающее окно с полным текстом
+      title: `${event.title} - ${event.name}`, 
     };
   };
-
 
   const handleEventClick = (event) => {
     handleDeleteEvent(event);
@@ -179,7 +177,7 @@ function App() {
             />
           </div>
         </div>
-
+        
         <div className="date-inputs">
           <div className="date-input">
             <label>Дата начала</label>
@@ -205,7 +203,6 @@ function App() {
           <button className="custom-btn btn-14" type="submit">Добавить</button>
         </div>
       </form>
-
       <Calendar
         localizer={localizer}
         events={events}
@@ -227,6 +224,7 @@ function App() {
           time: 'Время',
           event: 'Событие',
           showMore: (total) => `+ ещё ${total}`, 
+          noEvents: 'Нет событий в этом диапазоне.',
         }}
       />
     </div>
