@@ -53,7 +53,7 @@ h2{
 .date-input input {
   width: 100%; 
   height: 25px;
-  font-size: 1em;
+  font-size: 1.5em;
   padding: 5px; 
   box-sizing: border-box; 
 }
@@ -101,8 +101,8 @@ button {
   left: 0;
   z-index: -1;
   border-radius: 5px;
-  background-color: rgb(49,116,173);
-  background-image: linear-gradient(315deg, #3174ad 0%, #3174ad 74%);
+  background-color: rgba(57, 194, 75, 0.863);
+  background-image: linear-gradient(315deg, #32c045 0%, #38f361 74%);
    box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5);
   transition: all 0.3s ease;
 }
@@ -176,14 +176,99 @@ button {
   overflow: hidden; 
   text-overflow: ellipsis; 
   margin: 2px 0; 
-  
+  width: auto !important;
 }
 
 .rbc-event {
   display: flex; 
-  justify-content: center; 
+  justify-content: flex-start; 
 }
 .rbc-month-view .rbc-event {
-  white-space: nowrap; 
-  justify-content: left !important; 
+  white-space: normal; 
+  justify-content: flex-start !important; 
+  text-align: left;
+  display: flex;
+  min-height: 80px !important;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Сделайте его поверх других элементов */
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 10px; /* Сделай края более округлыми */
+  padding: 30px;       /* Увеличьте значение для большего отступа */
+  width: 400px;        /* Увеличьте ширину модального окна */
+  text-align: center;
+  position: relative;  /* Для абсолютного позиционирования крестика */
+}
+
+.close {
+  cursor: pointer;
+  position: absolute;  /* Позиционированный абсолютно для большей гибкости */
+  top: 10px;           /* Увеличьте верхний отступ */
+  right: 15px;         /* Сделайте правый отступ поближе к границе */
+  font-size: 28px;     /* Увеличьте размер шрифта для крестика */
+  color: #333;         /* Цвет крестика */
+}
+
+.modal-message {
+  font-size: 22px; /* Увеличьте размер шрифта для текста сообщения */
+  margin: 20px 0; /* Увеличьте отступы вокруг текста */
+}
+
+.modal-button {
+  padding: 12px 24px; /* Увеличьте размер кнопки */
+  background-color: #28a745; /* Ярко-зеленый цвет для кнопки */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px; /* Увеличьте размер текста кнопки */
+  transition: background-color 0.3s; /* Добавление перехода для фона */
+}
+
+.modal-button:hover {
+  background-color: #218838; /* Темно-зеленый при наведении */
+}
+
+.custom-event {
+  position: relative; /* Позволяет размещать абсолютный элемент внутри */
+  background: #3174ad; /* Цвет фона события */
+  color: white;
+  padding: 10px; /* Подходит лучше для обеспечения пространства */
+  border-radius: 5px;
+  margin-bottom: 10px; /* Отступ между событиями */
+  display: flex; /* Flexbox для центрации */
+  flex-direction: column; /* Расположение дочерних элементов по вертикали */
+  align-items: center; /* Центрирование элементов по горизонтали */
+  justify-content: center; /* Центрирование элементов по вертикали */
+  height: auto; /* Убираем фиксированную высоту */
+  min-height: 60px; /* Минимальная высота события */
+  box-sizing: border-box; /* Убедитесь, что padding учитывается в общих размерах */
+}
+
+.delete-button {
+  background: rgba(255, 0, 0, 0.6); /* Тусклый красный фон (RGB) */
+  color: white; /* Цвет текста */
+  border: none; /* Без рамки */
+  border-radius: 5px; /* Закруглённые углы */
+  cursor: pointer; /* Указатель курсора */
+  padding: 5px 10px; /* Отступы внутри кнопки */
+  font-size: 14px; /* Размер шрифта */
+  margin-top: 10px; /* Отступ сверху для отдаления кнопки от текста события */
+}
+
+.delete-button:hover {
+  background: rgba(255, 0, 0, 0.9); /* Яркий красный при наведении */
 }

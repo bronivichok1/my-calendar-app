@@ -5,6 +5,7 @@ import 'moment/locale/ru';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useLocation } from 'react-router-dom';
 import './index.css';
+import Modal from './Modal.jsx';
 
 const localizer = momentLocalizer(moment);
 
@@ -18,6 +19,9 @@ function App() {
   const [eventTitle, setEventTitle] = useState('');
   const [eventStart, setEventStart] = useState('');
   const [eventEnd, setEventEnd] = useState('');
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const roomUrls = {
     1: process.env.REACT_APP_ROOM1_URL,
@@ -81,7 +85,9 @@ function App() {
     );
   
     if (conflictingEvent) {
-      alert(`В промежуток с ${moment(conflictingEvent.start).format('HH:mm')} до ${moment(conflictingEvent.end).format('HH:mm')} проходит "${conflictingEvent.title}", ведущий: ${conflictingEvent.name}.`);
+      const message = `В промежуток с ${moment(conflictingEvent.start).format('HH:mm')} до ${moment(conflictingEvent.end).format('HH:mm')} проходит "${conflictingEvent.title}", ведущий: ${conflictingEvent.name}`;
+      setModalMessage(message);
+      setModalOpen(true); 
       return; 
     }
   
@@ -99,7 +105,11 @@ function App() {
       }
   
       const result = await response.json();
-      console.log('Событие добавлено на сервер:', result);
+     
+      const successMessage = `Ваше событие "${eventTitle}" с ${moment(start).format('HH:mm')} до ${moment(end).format('HH:mm')} успешно добавлено, ведущий: ${eventName}.`;
+      setModalMessage(successMessage);
+      setModalOpen(true);
+
       setEvents([...events, { ...newEvent, id: result.id }]);
     } catch (error) {
       console.error('Ошибка:', error);
@@ -114,34 +124,54 @@ function App() {
 
   const handleDeleteEvent = async (eventToDelete) => {
     if (window.confirm('Вы уверены, что хотите удалить это событие?')) {
-      try {
-        const response = await fetch(PATH`/schedule/room/${eventToDelete.id}`, {
-          method: 'DELETE',
-        });
-        if (!response.ok) {
-          throw new Error('Ошибка при удалении события на сервере');
+        try {
+            const response = await fetch(`${PATH}/schedule/room/${eventToDelete.id}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка при удалении события на сервере');
+            }
+
+            setEvents(events.filter(event => event.id !== eventToDelete.id));
+
+            const successMessage = `Событие "${eventToDelete.title}" успешно удалено.`;
+            setModalMessage(successMessage);
+            setModalOpen(true); 
+
+        } catch (error) {
+            console.error('Ошибка:', error);
+            setModalMessage('Не удалось удалить событие на сервере.');
+            setModalOpen(true); 
         }
-        setEvents(events.filter(event => event.id !== eventToDelete.id));
-      } catch (error) {
-        console.error('Ошибка:', error);
-        alert('Не удалось удалить событие на сервере');
-      }
     }
+};
+
+
+const eventStyleGetter = (event, start, end, isSelected) => {
+  
+  const backgroundColor = '#3174ad'; // цвет фона события
+  const style = {
+    backgroundColor,
+    borderRadius: '5px',
+    color: 'white',
+    display: 'flex', // используем flexbox для выравнивания
+    flexDirection: 'column', // располагаем элементы вертикально
+    alignItems: 'flex-start', // выравниваем элементы по левому краю
+    border: 'none',
+    cursor: 'pointer',
+    textAlign: 'left',
+    height: 'auto', // автоматическая высота
+    margin: '5px 0',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'normal', // разрешаем перенос строк
+    padding: '5px',
+    minHeight: '80px',
   };
 
-  const eventStyleGetter = (event) => {
-    const style = {
-      backgroundColor: '#3174ad',
-      border: 'none',
-      color: 'white',
-      borderRadius: '5px',
-      padding: '10px',
-      cursor: 'pointer',
-      height: 'auto', 
-      whiteSpace: 'normal', 
-    };
-    
-    return {
+
+  return {
       style,
       title: `${event.title} - ${event.name}`, 
     };
@@ -208,9 +238,11 @@ function App() {
         events={events}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: 650, margin: '25px' }}
+        style={{ height: 850, margin: '25px' }}
         eventPropGetter={eventStyleGetter}
         onSelectEvent={handleEventClick}
+        dayLayoutAlgorithm={"no-overlap"}
+        step={15}
         messages={{
           allDay: 'Весь день',
           previous: 'Предыдущий',
@@ -226,7 +258,17 @@ function App() {
           showMore: (total) => `+ ещё ${total}`, 
           noEvents: 'Нет событий в этом диапазоне.',
         }}
+        components={{
+          event: ({ event }) => (
+              <div style={{ padding: '5px' }}>
+                  <strong>{event.title}</strong> <br />
+                  <em>{event.name}</em>
+              </div>
+          ),
+      }}
       />
+      
+      <Modal isOpen={modalOpen} message={modalMessage} onClose={() => setModalOpen(false)} />
     </div>
   );
 }
