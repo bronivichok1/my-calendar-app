@@ -35,6 +35,20 @@ function App() {
   const PATH = process.env.REACT_APP_API_URL;
   
   useEffect(() => {
+
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (!user) { 
+        window.location.href = '/auth'; 
+        return;
+    }
+    
+    const nameParts = user.name.split(' ');
+    const lastName = nameParts[0]; 
+    const initials = nameParts.slice(1).map(part => part.charAt(0) + '.').join(''); 
+    
+    setEventName(`${lastName} ${initials}`);
+
     const fetchEvents = async () => {
       try {
         const response = await fetch(`${PATH}/schedule/room/${number}`);
@@ -46,6 +60,7 @@ function App() {
           number:parseInt(number,10),
           name: event.name,
           title: event.title,
+          titleorg: event.titleorg,
           start: new Date(event.start),
           end: new Date(event.end),
           id: event.id, 
@@ -75,10 +90,19 @@ function App() {
   }, [number, check]);
 
   const handleAddEvent = async () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const titleOrg = user ? user.title : '';
     const start = new Date(eventStart);
     const end = new Date(eventEnd);
     const num = parseInt(number, 10);
-    const newEvent = { number: num, name: eventName, title: eventTitle, start, end };
+
+    const newEvent = { 
+      number: num, 
+      name: eventName, 
+      title: eventTitle, 
+      titleorg: titleOrg, 
+      start, 
+      end };
   
     const conflictingEvent = events.find(event =>
       (start < event.end && end > event.start) 
@@ -117,7 +141,6 @@ function App() {
     }
   
     setEventTitle('');
-    setEventName('');
     setEventStart('');
     setEventEnd('');
   };

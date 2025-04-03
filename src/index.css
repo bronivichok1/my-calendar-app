@@ -7,6 +7,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+label{
+  font-weight: 700;
+  font-size: 18px;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -91,6 +96,8 @@ button {
 .btn-14 {
   background: rgba(188, 190, 188, 0.596);
   z-index: 1;
+  font-size: 18px;
+  font-weight: 700;
 }
 .btn-14:after {
   position: absolute;
@@ -101,8 +108,8 @@ button {
   left: 0;
   z-index: -1;
   border-radius: 5px;
-  background-color: rgba(57, 194, 75, 0.863);
-  background-image: linear-gradient(315deg, #32c045 0%, #38f361 74%);
+  background-color: rgba(50, 212, 163, 0.863);
+  background-image: linear-gradient(315deg, #1de498 0%, #2ee7bf 74%);
    box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5);
   transition: all 0.3s ease;
 }
@@ -272,3 +279,68 @@ button {
 .delete-button:hover {
   background: rgba(255, 0, 0, 0.9); /* Яркий красный при наведении */
 }
+
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+ }
+ 
+
+ .auth-form {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  width: 300px;
+ }
+ 
+
+ .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+ }
+ 
+
+ .form-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+ }
+ 
+
+ .form-group input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+ }
+ 
+
+ .auth-form button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+ }
+ 
+
+ .auth-form button:hover {
+  background-color: #0056b3;
+ }
+ 
+
+ .error-message {
+  color: red;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid red;
+  background-color: #ffe6e6;
+  border-radius: 4px;
+ }

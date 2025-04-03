@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './index.css';
+
 
 const RoomButton = ({ roomNumber, redirectUrl }) => {
   const handleClick = () => {
@@ -25,6 +26,15 @@ const RoomsList = () => {
     ));
   };
 
+  useEffect(() => {
+
+    const user = JSON.parse(localStorage.getItem('user')); 
+    if (!user) { 
+      window.location.href = '/auth'; 
+      return;
+    }
+  },[])
+  
   return (
     <div className="App">
       <div className="rooms-grid">
