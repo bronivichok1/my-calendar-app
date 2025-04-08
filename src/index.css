@@ -58,7 +58,7 @@ h2{
 .date-input input {
   width: 100%; 
   height: 25px;
-  font-size: 1.5em;
+  font-size: 1.3em;
   padding: 5px; 
   box-sizing: border-box; 
 }
@@ -108,8 +108,8 @@ button {
   left: 0;
   z-index: -1;
   border-radius: 5px;
-  background-color: rgba(50, 212, 163, 0.863);
-  background-image: linear-gradient(315deg, #1de498 0%, #2ee7bf 74%);
+  background-color: rgba(59, 226, 129, 0.726);
+  background-image: linear-gradient(315deg, #24e41daf 0%, #2ee77bb9 74%);
    box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5);
   transition: all 0.3s ease;
 }
@@ -247,6 +247,9 @@ button {
 
 .modal-button:hover {
   background-color: #218838; /* Темно-зеленый при наведении */
+}
+.modal-button.cancel {
+  background-color: red;
 }
 
 .custom-event {

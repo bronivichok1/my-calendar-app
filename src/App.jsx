@@ -22,6 +22,9 @@ function App() {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [showCancelButton, setShowCancelButton] = useState(false);
+  const [eventToDelete, setEventToDelete] = useState(null);
+
 
   const roomUrls = {
     1: process.env.REACT_APP_ROOM1_URL,
@@ -145,31 +148,69 @@ function App() {
     setEventEnd('');
   };
 
-  const handleDeleteEvent = async (eventToDelete) => {
-    if (window.confirm('Вы уверены, что хотите удалить это событие?')) {
-        try {
-            const response = await fetch(`${PATH}/schedule/room/${eventToDelete.id}`, {
-                method: 'DELETE',
-            });
+  const handleDeleteEvent = async () => {
+    if (!eventToDelete) return;
 
-            if (!response.ok) {
-                throw new Error('Ошибка при удалении события на сервере');
-            }
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userTitle = user ? user.title : '';
+    const titleOrg = eventToDelete.titleorg;
 
-            setEvents(events.filter(event => event.id !== eventToDelete.id));
+    const userLevel = getTitleLevel(userTitle);
+    const creatorLevel = getTitleLevel(titleOrg);
 
-            const successMessage = `Событие "${eventToDelete.title}" успешно удалено.`;
-            setModalMessage(successMessage);
-            setModalOpen(true); 
-
-        } catch (error) {
-            console.error('Ошибка:', error);
-            setModalMessage('Не удалось удалить событие на сервере.');
-            setModalOpen(true); 
-        }
+    if (userLevel > creatorLevel) {
+      setModalMessage('У вас нет прав для удаления этого события.');
+      setModalOpen(true);
+      return;
     }
-};
 
+    try {
+      const response = await fetch(`${PATH}/schedule/room/${eventToDelete.id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Ошибка при удалении события на сервере');
+      }
+
+      setEvents(events.filter(event => event.id !== eventToDelete.id));
+
+      const successMessage = `Событие "${eventToDelete.title}" успешно удалено.`;
+      setModalMessage(successMessage);
+      setModalOpen(true);
+    } catch (error) {
+      console.error('Ошибка:', error);
+      setModalMessage('Не удалось удалить событие на сервере.');
+      setModalOpen(true);
+    } finally {
+      setEventToDelete(null);
+      setShowCancelButton(false);
+    }
+  };
+  
+  const handleCancelDelete = () => {
+    setModalOpen(false);
+    setModalMessage('');
+    setShowCancelButton(false);
+    setEventToDelete(null);
+  };
+
+const getTitleLevel = (title) => {
+  if (title.includes('Ректор')) {
+    return 1;
+  } else if (title.includes('Декан')) {
+    return 2;
+  } else if (title.includes('Зам') || title.includes('Нач')|| title.includes('нач')|| title.includes('зам')) {
+    return 3; 
+  } else if(title==''){
+    setModalMessage('У вас нет должности, обратитесь в службу технической поддержки');
+    setModalOpen(true);
+    return;
+  }
+  else {
+    return 4; 
+  }
+};
 
 const eventStyleGetter = (event, start, end, isSelected) => {
   
@@ -201,7 +242,10 @@ const eventStyleGetter = (event, start, end, isSelected) => {
   };
 
   const handleEventClick = (event) => {
-    handleDeleteEvent(event);
+    setEventToDelete(event);
+    setModalMessage(`Вы уверены, что хотите удалить событие "${event.title}"?`);
+    setShowCancelButton(true);
+    setModalOpen(true);
   };
 
   return (
@@ -266,6 +310,8 @@ const eventStyleGetter = (event, start, end, isSelected) => {
         onSelectEvent={handleEventClick}
         dayLayoutAlgorithm={"no-overlap"}
         step={15}
+        min={new Date(0, 0, 0, 7, 0, 0)}
+        max={new Date(0, 0, 0, 23, 0, 0)}
         messages={{
           allDay: 'Весь день',
           previous: 'Предыдущий',
@@ -291,7 +337,19 @@ const eventStyleGetter = (event, start, end, isSelected) => {
       }}
       />
       
-      <Modal isOpen={modalOpen} message={modalMessage} onClose={() => setModalOpen(false)} />
+     <Modal
+        isOpen={modalOpen}
+        message={modalMessage}
+        showCancelButton={showCancelButton}
+        onClose={() => {
+          handleDeleteEvent();
+          setModalOpen(false);
+        }}
+        onCancel={() => {
+          handleCancelDelete();
+          setModalOpen(false);
+        }}
+      />
     </div>
   );
 }
