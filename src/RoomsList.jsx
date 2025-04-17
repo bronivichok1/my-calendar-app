@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import './index.css';
 
 
-const RoomButton = ({ roomNumber, redirectUrl }) => {
+const RoomButton = ({ roomNumber}) => {
   const handleClick = () => {
-    window.location.href = `${redirectUrl}/?num=${roomNumber}`;
+    window.location.href = `/?num=${roomNumber}`;
   };
 
   return (
@@ -18,11 +18,10 @@ const RoomButton = ({ roomNumber, redirectUrl }) => {
 };
 
 const RoomsList = () => {
-  const redirectUrl = process.env.REACT_APP_REDIRECT_URL;
 
   const renderRoomButtons = () => {
     return Array.from({ length: 6 }, (_, index) => (
-      <RoomButton key={index + 1} roomNumber={index + 1} redirectUrl={redirectUrl} />
+      <RoomButton key={index + 1} roomNumber={index + 1} />
     ));
   };
 

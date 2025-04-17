@@ -12,7 +12,7 @@ const localizer = momentLocalizer(moment);
 function App() {
   const query = new URLSearchParams(useLocation().search);
   const number = query.get('num') || "1";
-  const check = query.get('ch') || 'false';
+  //const check = query.get('ch') || 'false';
 
   const [events, setEvents] = useState([]);
   const [eventName, setEventName] = useState('');
@@ -26,7 +26,7 @@ function App() {
   const [eventToDelete, setEventToDelete] = useState(null);
 
 
-  const roomUrls = {
+/*  const roomUrls = {
     1: process.env.REACT_APP_ROOM1_URL,
     2: process.env.REACT_APP_ROOM2_URL,
     3: process.env.REACT_APP_ROOM3_URL,
@@ -34,7 +34,7 @@ function App() {
     5: process.env.REACT_APP_ROOM5_URL,
     6: process.env.REACT_APP_ROOM6_URL,
     7: process.env.REACT_APP_ROOM7_URL,
-  };
+  };*/
   const PATH = process.env.REACT_APP_API_URL;
   
   useEffect(() => {
@@ -69,7 +69,7 @@ function App() {
           id: event.id, 
         }));
         setEvents(formattedEvents);
-        if (check === 'true') {
+        /*if (check === 'true') {
           const now = new Date();
           const currentEvent = formattedEvents.find(event => now >= event.start && now <= event.end);
           if (currentEvent) {
@@ -83,14 +83,14 @@ function App() {
               }
             }
           }
-        }
+        }*/
       } catch (error) {
         console.error('Ошибка:', error);
         alert('Не удалось загрузить события с сервера');
       }
     };
     fetchEvents();
-  }, [number, check]);
+  }, [number]);
 
   const handleAddEvent = async () => {
     const user = JSON.parse(localStorage.getItem('user'));
