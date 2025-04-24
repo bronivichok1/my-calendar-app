@@ -56,9 +56,9 @@ h2{
 }
 
 .date-input input {
-  width: 100%; 
+  width: 75%; 
   height: 25px;
-  font-size: 1.3em;
+  font-size: 1.2em;
   padding: 5px; 
   box-sizing: border-box; 
 }
@@ -125,77 +125,10 @@ button {
   top: 2px;
 }
 
-.room-button {
-  background-color: #D0E6F1;
-  color: #2f5e94;
-  font-family: 'Roboto', sans-serif;
-  font-size: 22px; 
-  padding: 30px 20px; 
-  margin: 8px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.room-button:hover {
-  background-color: #F5A623;
-  color: white;
-}
-
-.rooms-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 16px;
-}
-
 @media (max-width: 768px) {
   .rooms-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-}
-
-.rbc-event {
-  width: 100%;
-  min-height: 40px; 
-  padding: 10px; 
-  font-size: 18px; 
-  white-space: normal; 
-  overflow: hidden; 
-  text-overflow: ellipsis;
-  word-wrap: break-word; 
-  overflow-wrap: break-word; 
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-}
-.rbc-time-slot {
-  width: 150px; 
-}
-
-.rbc-event:hover {
-  background-color: #4a90e2; 
-  color: white; 
-}
-
-.rbc-day-view .rbc-event,
-.rbc-week-view .rbc-event {
-  min-height: 20px; 
-  white-space: normal; 
-  overflow: hidden; 
-  text-overflow: ellipsis; 
-  margin: 2px 0; 
-  width: auto !important;
-}
-
-.rbc-event {
-  display: flex; 
-  justify-content: flex-start; 
-}
-.rbc-month-view .rbc-event {
-  white-space: normal; 
-  justify-content: flex-start !important; 
-  text-align: left;
-  display: flex;
-  min-height: 80px !important;
 }
 
 .modal-overlay {
@@ -347,3 +280,330 @@ button {
   background-color: #ffe6e6;
   border-radius: 4px;
  }
+
+.logout-button {
+  background-color: #c53030;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.event-form-container {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.event-form-container.active {
+  max-height: 500px; /* Примерная высота формы, подберите под свой случай */
+}
+
+.rbc-month-view .rbc-row-bg .rbc-day-bg.selectable-day:hover {
+  background-color: rgba(169, 217, 236, 0.6) !important; /* Светло-серый при наведении */
+  transition: background-color 0.3s ease !important; /* Плавный переход */
+  cursor: pointer !important;
+}
+.active-day:hover{
+  background-color: rgba(128, 128, 128, 0.2) !important; /* Светло-серый при наведении */
+  transition: background-color 0.3s ease !important; /* Плавный переход */
+  cursor: pointer !important;
+}
+ .rbc-day-bg.highlighted-date {
+  background-color: rgba(169, 217, 236, 0.836); /* Темно-серый при выделении */
+  transition: background-color 0.5s ease;
+}
+
+ .event-form-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 20px;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 1.5s ease-in-out; /* Увеличиваем время анимации до 1.5 секунды */
+}
+
+ .event-form-container.visible {
+  max-height: 500px; /* Максимальная высота для отображения */
+}
+
+.past-day {
+  background-color: rgba(128, 128, 128, 0.2); /* Серый цвет для прошедших дней */
+  cursor: not-allowed; /* Курсор "недоступен" */
+  pointer-events: none;
+}
+
+/* Увеличенный дизайн для кнопки "Назад" */
+.btn-back {
+  /* Основные стили */
+  background-color: #f0f0f073; /* Светло-серый фон */
+  border: 1px solid #000000; /* Серая граница */
+  color: #333333; /* Темно-серый текст */
+  padding: 5px 15px; /* УВЕЛИЧЕННЫЕ внутренние отступы */
+  text-align: center; /* Выравнивание текста по центру */
+  text-decoration: none; /* Убираем подчеркивание */
+  display: inline-block; /* Отображение как строчно-блочный элемент */
+  font-size: 20px; /* УВЕЛИЧЕННЫЙ размер шрифта */
+  margin: 8px 4px; /* УВЕЛИЧЕННЫЕ внешние отступы (опционально, чтобы соответствовать размеру) */
+  transition-duration: 0.3s; /* Длительность анимации перехода */
+  cursor: pointer; /* Изменение курсора при наведении */
+  border-radius: 5px; /* Немного большее скругление углов, чтобы выглядело пропорционально */
+  min-width: 240px; /* УВЕЛИЧЕННАЯ минимальная ширина кнопки */
+  box-sizing: border-box; /* Учитываем padding и border в общем размере */
+  line-height: 1.5; /* Межстрочный интервал */
+}
+
+/* Стили при наведении (hover) */
+.btn-back:hover {
+  background-color: #94949483; /* Фон становится немного темнее */
+  border-color: #000000; /* Граница становится немного темнее */
+  color: #222222; /* Текст становится немного темнее */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); /* Тень стала немного больше */
+}
+
+/* Стили при активном состоянии (active) - когда кнопка нажата */
+.btn-back:active {
+  background-color: #cccccc; /* Фон еще темнее */
+  border-color: #999999; /* Граница еще темнее */
+  box-shadow: none; /* Убираем тень */
+  transform: translateY(1px); /* Немного сдвигаем кнопку вниз для эффекта нажатия */
+}
+
+/* Стили для отключенного состояния (disabled) */
+.btn-back:disabled {
+  opacity: 0.6; /* Уменьшаем прозрачность */
+  cursor: not-allowed; /* Меняем курсор на "запрещено" */
+  background-color: #f0f0f0; /* Возвращаем исходный фон */
+  border-color: #cccccc; /* Возвращаем исходную границу */
+  color: #aaaaaa; /* Делаем текст светлее */
+  box-shadow: none;
+  transform: none;
+}
+
+.rbc-time-content .rbc-timeslot-group:hover {
+  background-color: rgba(128, 128, 128, 0.2); /* Серый цвет с 20% прозрачностью */
+  cursor: pointer; /* Изменяем курсор, чтобы показать интерактивность */
+}
+
+.rbc-time-content .rbc-timeslot-group {
+   transition: background-color 0.2s ease;
+}
+
+.rbc-events-container {
+  pointer-events: none;
+  /* position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 2; */ /* Убедитесь, что эти или аналогичные стили позиционирования присутствуют */
+}
+
+/* Убедитесь, что сами события внутри контейнера интерактивны */
+.rbc-events-container .rbc-event {
+   pointer-events: auto;
+   /* position: absolute; */ /* Возможно, уже есть из стилей библиотеки */
+}
+
+.rbc-time-header {
+  display: none !important; /* Используем !important для переопределения стандартных стилей */
+}
+
+.rbc-event {
+  /* Внешний вид и внутренние отступы */
+  padding: 10px; /* Отступы внутри события */
+  background-color: #3174ad; /* Цвет фона по умолчанию (синий) */
+  color: white; /* Цвет текста по умолчанию */
+  border-radius: 5px; /* Скругление углов */
+  border: 1px solid rgba(0, 0, 0, 0.2); /* Тонкая граница */
+  box-sizing: border-box; /* Включаем padding и border в расчетный размер элемента */
+  line-height: 1.3; /* Межстрочный интервал */
+
+  /* Типографика и перенос текста */
+  font-size: 18px; /* Размер шрифта */
+  white-space: normal; /* Разрешаем обычный перенос строк */
+  overflow: hidden; /* Скрываем контент, который выходит за рамки */
+  text-overflow: ellipsis; /* Добавляем многоточие, если текст в одной строке не помещается */
+  word-wrap: break-word; /* Перенос длинных слов */
+  overflow-wrap: break-word; /* Альтернатива word-wrap для лучшей совместимости */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Тень текста для читаемости */
+
+  /* Flexbox для выравнивания содержимого */
+  display: flex;
+  justify-content: flex-start; /* Выравнивание по левому краю */
+  align-items: flex-start; /* Выравнивание по верхнему краю */
+
+  /* Удалены: width: 100%; */
+  /* Удалены: min-height: 60px; (лучше управлять в представлениях дня/недели/месяца) */
+}
+
+/* Стили событий при наведении */
+.rbc-event:hover {
+  background-color: #4a90e2; /* Цвет при наведении */
+  color: white; /* Цвет текста при наведении */
+  cursor: pointer; /* Курсор-указатель при наведении */
+}
+
+/* Стили для событий в дневном и недельном представлениях */
+.rbc-day-view .rbc-event,
+.rbc-week-view .rbc-event {
+  min-height: 20px; /* Минимальная высота события (может быть переопределена расчетами библиотеки) */
+  margin: 2px 1px; /* Отступы между событиями: 2px сверху/снизу, 1px слева/справа */
+
+}
+
+.rbc-month-view .rbc-event {
+  min-height: 80px !important; /* Минимальная высота события в месяце, часто нужен !important */
+  margin: 2px; /* Отступы вокруг события в месяце */
+}
+
+.header {
+  position: sticky; /* Оставляем позиционирование */
+  top: 0;
+  background-color: #D0E6F1;
+  color: #000000;
+  padding: 15px;
+  z-index: 1000;
+  display: flex; /* Включаем Flexbox */
+  align-items: center; /* Вертикальное выравнивание по центру */
+  justify-content: space-between; /* Распределяем пространство между элементами */
+}
+
+/* Псевдо-элемент для балансировки пространства слева */
+/* Он будет иметь ту же ширину, что и .header-container, */
+/* чтобы визуально центрировать .header-title */
+.header::before {
+  content: ""; /* Обязательное свойство для псевдо-элементов */
+  /* Установите ширину, соответствующую ожидаемой ширине .header-container */
+  /* Вам может потребоваться настроить это значение, */
+  /* измерив фактическую ширину блока справа в браузере */
+  /* Значение от 150px до 250px может быть хорошей отправной точкой. */
+  width: 10%; /* Пример ширины, настройте по необходимости */
+  flex-shrink: 0; /* Запрещаем этому элементу сжиматься */
+}
+
+/* Стили для заголовка аудитории */
+.header-title {
+  /* Удаляем устаревшее абсолютное позиционирование */
+  /* position: absolute; */
+  /* top: 30%; */
+  /* left: 47%; */
+  flex-grow: 1; /* Заголовок занимает всё доступное пространство */
+  text-align: center;
+  font-size: 24px;
+  margin: 0; /* Убираем внешние отступы */
+  text-align: center; /* Центрируем текст внутри самого элемента title */
+}
+
+/* Стили для контейнера с именем пользователя и кнопкой Выход */
+.header-container {
+  /* Удаляем устаревшее абсолютное позиционирование */
+  /* position: absolute; */
+  /* top: 10%; */
+  /* left: 80%; */
+  
+  display: flex; /* Делаем этот контейнер флекс-контейнером */
+  align-items: center; /* Вертикальное выравнивание элементов внутри контейнера */
+  /* Установите фиксированную ширину или минимальную ширину, */
+  /* соответствующую ширине псевдо-элемента ::before */
+  /* Эта ширина должна быть достаточной для размещения .event-name и кнопки .logout-button */
+  width: 200px; /* Пример ширины, настройте по необходимости (должна совпадать с ::before) */
+  flex-shrink: 0; /* Запрещаем этому элементу сжиматься */
+  justify-content: flex-end; /* Выравниваем элементы внутри контейнера по правому краю */
+}
+
+/* Стили для имени пользователя */
+.event-name {
+  margin-right: 16px; /* Отступ справа от имени до кнопки */
+  font-size: 18px;
+}
+
+/* Контейнер для всей страницы со списком комнат (и загрузкой) */
+.rooms-container {
+  /* Добавляем свойства для занятия всей высоты и ширины */
+  min-height: 100vh; /* Занимает минимум 100% высоты видимой части окна */
+  width: 100%; /* Занимает всю доступную ширину */
+  display: flex; /* Используем Flexbox для удобного центрирования */
+  flex-direction: column; /* Выравниваем элементы Flexbox вертикально */
+
+  /* Существующие стили */
+  justify-content: center; /* Центрируем содержимое по вертикали (при flex-direction: column) */
+  align-items: center; /* Центрируем содержимое по горизонтали (при flex-direction: column) */
+  background-color: #f0f4f8; /* Нежный фон страницы */
+
+  /* Убедитесь, что body или родительские элементы не ограничивают высоту */
+  /* Обычно в глобальных стилях добавляют:
+     html, body, #root { height: 100%; margin: 0; padding: 0; }
+  */
+}
+
+/* Контейнер для кнопок - остается как есть */
+.rooms-grid-unique {
+  display: flex; /* Flexbox для грида */
+  flex-direction: column; /* Кнопки вертикально */
+  align-items: center; /* Центруем кнопки по горизонтали */
+  gap: 20px; /* Отступы между кнопками */
+}
+
+/* Также применим аналогичные стили к контейнеру загрузки */
+.loading-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f4f8; /* Тот же фон, что и для rooms-container */
+}
+
+
+.room-button {
+  background-color: #D0E6F1;
+  color: #2f5e94;
+  font-family: 'Roboto', sans-serif;
+  font-size: 22px; 
+  padding: 30px 20px; 
+  margin: 8px;
+  border-color: rgba(128, 128, 128, 0.479);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 250%;
+}
+
+.room-button:hover {
+  background-color: #F5A623;
+  color: white;
+}
+
+.room-list-button {
+  padding: 10px 15px; /* Отступы внутри кнопки */
+  background-color: #F5A623; /* Цвет фона кнопки */
+  color: white; /* Цвет текста на кнопке */
+  border: none; /* Убираем рамку */
+  border-radius: 5px; /* Скругление краев кнопки */
+  font-size: 16px; /* Размер текста */
+  cursor: pointer; /* Указатель при наведении */
+  margin-right: auto; /* Сдвигаем кнопку к левому краю */
+  transition: background-color 0.3s; /* Эффект при наведении */
+}
+
+.room-list-button:hover {
+  background-color: #ff9d00; /* Темный цвет кнопки при наведении */
+}
+
+.header-info {
+  display: flex; /* Группируем элементы справа */
+  align-items: center; /* Центрируем текст и кнопку выхода */
+}
+
+.logout-button:hover {
+  background-color: #c82333b2; /* Темный цвет кнопки выхода при наведении */
+}
+
+/* Стили для прошедших временных слотов в Day view */
+.past-slot {
+  background-color: rgba(0, 0, 0, 0.123) !important; /* Более темный серый, используйте !important если нужно переопределить стили библиотеки */
+  cursor: not-allowed !important; /* Убедимся, что курсор действительно меняется */
+}
+.past-slot:hover {
+  background-color: rgba(0, 0, 0, 0.123)  !important; /* Более темный серый, используйте !important если нужно переопределить стили библиотеки */
+  cursor: not-allowed !important; /* Убедимся, что курсор действительно меняется */
+}

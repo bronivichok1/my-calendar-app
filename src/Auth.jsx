@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './index.css';
 
 const Auth = () => {
@@ -6,14 +7,20 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
-  const loginUrl = `${apiUrl}/api/auth/login`;
+  const loginUrl = `${apiUrl}/auth/login`;
   const roomListUrl = '/rooms';
+  
+  const navigate = useNavigate(); 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError('');
+    let finalUsername = username;
 
-    let finalUsername = username.includes('@') ? username : `${username}@bsmu.by`;
+    if (!username.includes('@')) {
+      finalUsername = `${username}@bsmu.by`;
+    }
+
+    setError('');
 
     try {
       const response = await fetch(loginUrl, {
@@ -22,19 +29,23 @@ const Auth = () => {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ username: finalUsername, password }),
+        body: JSON.stringify({
+          username: finalUsername,
+          password,
+        }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
         const errorMessage = errorData.message || 'Invalid credentials';
         setError(`Login failed: ${errorMessage}`);
+        console.error('Login failed:', errorData);
         return;
       }
 
-      const data = await response.json();
-      console.log('Login response:', data);
-      window.location.href = roomListUrl;
+      console.log('Login successful. Session cookie should be set.');
+      navigate(roomListUrl); 
+
     } catch (err) {
       console.error('Login error:', err);
       setError('Failed to connect to the server.');
@@ -59,6 +70,7 @@ const Auth = () => {
         <div className="form-group">
           <label htmlFor="password">Пароль:</label>
           <input
+            autoComplete="off"
             type="password"
             id="password"
             value={password}

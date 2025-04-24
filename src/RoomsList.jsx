@@ -1,73 +1,79 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './index.css';
 
 const RoomButton = ({ roomNumber }) => {
+  const navigate = useNavigate(); 
+
   const handleClick = () => {
-    window.location.href = `/?num=${roomNumber}`;
+    navigate(`/?num=${roomNumber}`);
   };
 
   return (
     <button onClick={handleClick} className="room-button">
-      Комната {roomNumber}
+      Кабинет №{roomNumber}
     </button>
   );
 };
 
 const RoomsList = () => {
-  const logoutUrl = `${process.env.REACT_APP_API_URL}/auth/logout`;
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const statusUrl = `${apiUrl}/auth/status`;
+  const authUrl = '/auth';
+  const navigate = useNavigate(); 
 
-  const handleLogout = async () => {
-    try {
-      const response = await fetch(logoutUrl, {
-        method: 'POST',
-        credentials: 'include', // Включаем куки
-      });
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const response = await fetch(statusUrl, {
+          method: 'GET',
+          credentials: 'include',
+        });
 
-      if (response.ok) {
-        window.location.href = '/auth'; // Перенаправление на страницу авторизации после выхода
-      } else {
-        console.error('Logout failed');
+        if (!response.ok) {
+          console.error('Status check failed:', response.statusText);
+          setIsAuthenticated(false);
+        } else {
+          const statusData = await response.json();
+          setIsAuthenticated(statusData.isAuthenticated);
+        }
+      } catch (error) {
+        console.error('Failed to check authentication status:', error);
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false); 
       }
-    } catch (err) {
-      console.error('Logout error:', err);
+    };
+
+    checkAuthStatus();
+  }, [statusUrl]);
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      console.log('User not authenticated, redirecting to login...');
+      navigate(authUrl); 
     }
-  };
+  }, [isLoading, isAuthenticated, authUrl, navigate]); 
 
   const renderRoomButtons = () => {
-    return Array.from({ length: 6 }, (_, index) => (
+    return Array.from({ length: 5 }, (_, index) => (
       <RoomButton key={index + 1} roomNumber={index + 1} />
     ));
   };
 
-  useEffect(() => {
-    const checkAuthenticated = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/check`, {
-          method: 'GET',
-          credentials: 'include', // Включаем куки
-        });
+  if (isLoading) {
+    return <div className="loading-container">Загрузка...</div>;
+  }
 
-        if (!response.ok) {
-          // Если ответ не успешен, перенаправляем на страницу аутентификации
-          window.location.href = '/auth';
-        }
-      } catch (err) {
-        console.error('Authentication check error:', err);
-        window.location.href = '/auth';
-      }
-    };
-
-    checkAuthenticated();
-  }, []);
+  if (!isAuthenticated) {
+    return null; 
+  }
 
   return (
-    <div className="App">
-      <header className="app-header">
-        <button onClick={handleLogout} className="logout-button">
-          Выйти
-        </button>
-      </header>
-      <div className="rooms-grid">
+    <div className="rooms-container">
+      <div className="rooms-grid-unique">
         {renderRoomButtons()}
       </div>
     </div>
