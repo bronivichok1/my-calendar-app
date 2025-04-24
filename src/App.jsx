@@ -12,7 +12,8 @@ const localizer = momentLocalizer(moment);
 function App() {
   const query = new URLSearchParams(useLocation().search);
   const number = query.get('num') || "1";
-  //const check = query.get('ch') || 'false';
+  
+  const [user, setUser] = useState(null);
 
   const [events, setEvents] = useState([]);
   const [eventName, setEventName] = useState('');
@@ -25,32 +26,32 @@ function App() {
   const [showCancelButton, setShowCancelButton] = useState(false);
   const [eventToDelete, setEventToDelete] = useState(null);
 
-
-/*  const roomUrls = {
-    1: process.env.REACT_APP_ROOM1_URL,
-    2: process.env.REACT_APP_ROOM2_URL,
-    3: process.env.REACT_APP_ROOM3_URL,
-    4: process.env.REACT_APP_ROOM4_URL,
-    5: process.env.REACT_APP_ROOM5_URL,
-    6: process.env.REACT_APP_ROOM6_URL,
-    7: process.env.REACT_APP_ROOM7_URL,
-  };*/
   const PATH = process.env.REACT_APP_API_URL;
   
   useEffect(() => {
 
-    const user = JSON.parse(localStorage.getItem('user'));
-
-    if (!user) { 
+    const checkAuthenticated = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/check`, {
+          method: 'GET',
+          credentials: 'include', // Включаем куки
+        });
+  
+        if (!response.ok) {
+          window.location.href = '/auth'; 
+          return;
+        }
+        const userData = await response.json(); // Получаем данные о пользователе
+        setUser(userData); // Устанавливаем пользователя в состоянии
+        const nameParts = userData.name.split(' ');
+        const lastName = nameParts[0]; 
+        const initials = nameParts.slice(1).map(part => part.charAt(0) + '.').join(''); 
+        setEventName(`${lastName} ${initials}`);
+      } catch (error) {
+        console.error('Ошибка при проверке аутентификации:', error);
         window.location.href = '/auth'; 
-        return;
-    }
-    
-    const nameParts = user.name.split(' ');
-    const lastName = nameParts[0]; 
-    const initials = nameParts.slice(1).map(part => part.charAt(0) + '.').join(''); 
-    
-    setEventName(`${lastName} ${initials}`);
+      }
+    };
 
     const fetchEvents = async () => {
       try {
@@ -69,31 +70,16 @@ function App() {
           id: event.id, 
         }));
         setEvents(formattedEvents);
-        /*if (check === 'true') {
-          const now = new Date();
-          const currentEvent = formattedEvents.find(event => now >= event.start && now <= event.end);
-          if (currentEvent) {
-            const join = window.confirm(`Сейчас проходит: ${currentEvent.title}. Хотите присоединиться?`);
-            if (join) {
-              const roomUrl = roomUrls[number];
-              if (roomUrl) {
-                window.location.href = roomUrl;
-              } else {
-                alert('Ссылка для этой комнаты недоступна.');
-              }
-            }
-          }
-        }*/
       } catch (error) {
         console.error('Ошибка:', error);
         alert('Не удалось загрузить события с сервера');
       }
     };
     fetchEvents();
+    checkAuthenticated();
   }, [number]);
 
   const handleAddEvent = async () => {
-    const user = JSON.parse(localStorage.getItem('user'));
     const titleOrg = user ? user.title : '';
     const start = new Date(eventStart);
     const end = new Date(eventEnd);
@@ -151,7 +137,6 @@ function App() {
   const handleDeleteEvent = async () => {
     if (!eventToDelete) return;
 
-    const user = JSON.parse(localStorage.getItem('user'));
     const userTitle = user ? user.title : '';
     const titleOrg = eventToDelete.titleorg;
 

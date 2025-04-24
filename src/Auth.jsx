@@ -5,18 +5,15 @@ const Auth = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
   const apiUrl = process.env.REACT_APP_API_URL;
-  const loginUrl = `${apiUrl}/auth/login`;
+  const loginUrl = `${apiUrl}/api/auth/login`;
   const roomListUrl = '/rooms';
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setError('');
 
-    let finalUsername = username;
-    if (!username.includes('@')) {
-      finalUsername = `${username}@bsmu.by`;
-    }
+    let finalUsername = username.includes('@') ? username : `${username}@bsmu.by`;
 
     try {
       const response = await fetch(loginUrl, {
@@ -24,10 +21,8 @@ const Auth = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          username: finalUsername,
-          password,
-        }),
+        credentials: 'include',
+        body: JSON.stringify({ username: finalUsername, password }),
       });
 
       if (!response.ok) {
@@ -37,11 +32,8 @@ const Auth = () => {
         return;
       }
 
-      const userData = await response.json();
-      console.log('Login successful:', userData);
-
-      localStorage.setItem('user', JSON.stringify(userData.user));
-
+      const data = await response.json();
+      console.log('Login response:', data);
       window.location.href = roomListUrl;
     } catch (err) {
       console.error('Login error:', err);
