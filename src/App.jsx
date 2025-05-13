@@ -150,11 +150,11 @@ function App() {
   };
 
   const handleAddEvent = async () => {
-    // Первичная проверка наличия всех данных и валидности формата даты
+
     if (!isStartDateValid || !isEndDateValid || !eventTitle || !eventName || !currentUser) {
       if (!currentUser) {
         setModalMessage('Не удалось получить данные пользователя. Пожалуйста, попробуйте войти снова.');
-        setIsAuthenticated(false); // Перенаправление на логин
+        setIsAuthenticated(false); 
       } else {
         setModalMessage('Пожалуйста, заполните все поля и введите дату в правильном формате (гггг-мм-дд чч:mm).');
       }
@@ -164,7 +164,6 @@ function App() {
 
     const titleOrg = currentUser.title;
 
-    // Преобразование строк даты/времени в объекты Date и Moment
     const start = new Date(eventStart);
     const end = new Date(eventEnd);
     const num = parseInt(number, 10);
@@ -172,14 +171,12 @@ function App() {
     const startTime = moment(start);
     const endTime = moment(end);
 
-    // Проверка: Дата окончания должна быть позже даты начала
     if (start >= end) {
         setModalMessage('Дата окончания должна быть позже даты начала.');
         setModalOpen(true);
         return;
     }
 
-    // Проверка: Минимальная длительность события - 30 минут
     const durationInMinutes = endTime.diff(startTime, 'minutes');
     if (durationInMinutes < 30) {
         setModalMessage('Минимальная длительность события - 30 минут.');
@@ -187,8 +184,6 @@ function App() {
         return;
     }
 
-    // Проверка: Время начала не может быть в прошлом
-    // Добавляем небольшой буфер (например, 1 минута) для учета возможной задержки или неточности времени
     const nowWithBuffer = moment().subtract(1, 'minute'); 
     if (startTime.isBefore(nowWithBuffer)) {
         setModalMessage('Нельзя добавить событие на прошедшую дату или время.');
@@ -196,7 +191,6 @@ function App() {
         return;
     }
 
-    // Проверка: События могут начинаться только с 07:00
     const minAllowedTime = moment(start).clone().startOf('day').add(7, 'hours');
     if (startTime.isBefore(minAllowedTime)) {
         setModalMessage('Недопустимое время начала события. События могут начинаться только с 07:00.');
@@ -204,19 +198,14 @@ function App() {
         return;
     }
 
-    // Проверка: События могут заканчиваться только до 23:00 того же дня, что и начало
-    // Примечание: Если события могут переходить через полночь, эта логика требует доработки.
-    const maxAllowedEndBoundary = moment(start).clone().startOf('day').add(23, 'hours'); // 23:00
+    const maxAllowedEndBoundary = moment(start).clone().startOf('day').add(23, 'hours'); 
     if (endTime.isAfter(maxAllowedEndBoundary)) {
         setModalMessage('Недопустимое время окончания события. События могут заканчиваться только до 23:00.');
         setModalOpen(true);
         return;
     }
 
-
-    // Проверка на пересечение с существующими событиями
     const conflictingEvent = events.find(event =>
-      // Проверяем пересечение интервалов [start, end) с [event.start, event.end)
       (startTime.isBefore(moment(event.end)) && endTime.isAfter(moment(event.start)))
     );
 
@@ -227,17 +216,15 @@ function App() {
       return;
     }
 
-    // Если все проверки пройдены, формируем объект нового события
     const newEvent = {
       number: num,
       name: eventName,
       title: eventTitle,
       titleorg: titleOrg,
-      start, // Передаем объекты Date
-      end    // Передаем объекты Date
+      start, 
+      end    
     };
 
-    // Отправка события на сервер
     try {
       const response = await fetch(PATH + `/schedule/room`, {
         method: 'POST',
@@ -249,17 +236,15 @@ function App() {
       if (!response.ok) {
          if (response.status === 401) {
             console.log('Session expired or unauthorized on add event, redirecting to login.');
-            setIsAuthenticated(false); // Это вызовет редирект через useEffect
-            return; // Прекращаем выполнение функции
+            setIsAuthenticated(false);
+            return; 
          }
-         // Попытка извлечь сообщение об ошибке из тела ответа
          const errorBody = await response.text();
          let errorMessage = 'Ошибка при добавлении события на сервер';
          try {
            const errorJson = JSON.parse(errorBody);
            errorMessage = errorJson.message || errorMessage;
          } catch (e) {
-           // Если тело ответа не JSON, используем статус ошибки
            errorMessage = `Ошибка при добавлении события на сервере: ${response.statusText}`;
          }
          throw new Error(errorMessage); // Генерируем ошибку для перехвата в catch блоке
@@ -269,20 +254,18 @@ function App() {
       const result = await response.json();
       const eventForDisplay = {
         ...newEvent,
-        id: result.id, // Предполагается, что сервер возвращает id нового события
-        originalTitle: newEvent.title // Сохраняем оригинальное название
+        id: result.id, 
+        originalTitle: newEvent.title 
       };
       const successMessage = `Ваше событие "${eventForDisplay.originalTitle}" с ${moment(start).format('DD.MM.YYYY HH:mm')} до ${moment(end).format('DD.MM.YYYY HH:mm')} успешно добавлено, ведущий: ${eventName}.`;
       setModalMessage(successMessage);
       setModalOpen(true);
-      setEvents([...events, eventForDisplay]); // Обновляем список событий в состоянии
+      setEvents([...events, eventForDisplay]); 
     } catch (error) {
-      // Обработка ошибок при выполнении запроса или ошибок, сгенерированных выше
       console.error('Ошибка при добавлении события:', error);
       setModalMessage(error.message || 'Не удалось добавить событие на сервер.');
       setModalOpen(true);
     } finally {
-      // Сброс состояния формы и связанных переменных после попытки добавления
       setEventTitle('');
       setHighlightedDate(null);
       setSelectedDate(null);
@@ -299,8 +282,7 @@ function App() {
     const creatorLevel = getTitleLevel(creatorTitle);
 
     if (userLevel === -1 || creatorLevel === -1) {
-      console.warn("Could not determine title levels for permission check.");
-      setModalMessage('Не удалось определить уровень доступа для проверки прав на удаление.');
+      setModalMessage('Не удалось определить должность для проверки прав на удаление.');
       setModalOpen(true);
       setEventToDelete(null);
       setShowCancelButton(false);
@@ -392,7 +374,7 @@ function App() {
            return;
        }
 
-       if (userTitle === creatorTitle || userLevel <= creatorLevel) {
+       if (userTitle === creatorTitle || creatorLevel <= userLevel) {
             setEventToDelete(event);
             setModalMessage(`Вы уверены, что хотите удалить событие "${event.originalTitle || event.title}"?`);
             setShowCancelButton(true);
@@ -409,23 +391,18 @@ function App() {
     const now = moment();
     const currentCalendarView = calendarDisplayStates[monthIndex].view;
 
-    // Проверка на прошедшую дату при переключении из Month view
     if (currentCalendarView === 'month' && selectedMomentStart.isBefore(now, 'day')) {
-        // Если кликнули на прошедший день в Month view, ничего не делаем
       return;
     }
 
-    // Проверка на прошедшее время при клике в Day view
     if (currentCalendarView === 'day') {
-         const nowWithBuffer = moment().subtract(1, 'minute'); // Небольшой буфер
+         const nowWithBuffer = moment().subtract(1, 'minute'); 
          if (selectedMomentStart.isBefore(nowWithBuffer)) {
-             // Если кликнули на прошедший временной слот в Day view, ничего не делаем
              return;
          }
     }
 
 
-    // Логика переключения на Day view, если текущее представление - Month
     if (currentCalendarView === 'month') {
         setCalendarDisplayStates(prevStates => {
             const newStates = [...prevStates];
@@ -435,14 +412,13 @@ function App() {
     }
 
 
-    // Если клик разрешен (в будущем или текущем слоте), показываем форму и устанавливаем даты
     const formattedStartDate = selectedMomentStart.format('YYYY-MM-DD HH:mm');
-    const formattedEndDate = moment(slotInfo.end).format('YYYY-MM-DD HH:mm'); // Используем slotInfo.end для конца слота
+    const formattedEndDate = moment(slotInfo.end).format('YYYY-MM-DD HH:mm'); 
 
     setIsFormVisible(true);
     setSelectedDate(slotInfo.start);
     setEventStart(formattedStartDate);
-    setEventEnd(formattedEndDate); // Устанавливаем конец слота как предлагаемое время окончания
+    setEventEnd(formattedEndDate); 
 
     setIsStartDateValid(validateDateFormat(formattedStartDate));
     setIsEndDateValid(validateDateFormat(formattedEndDate));
@@ -550,7 +526,7 @@ function App() {
       {!isAnyCalendarInDayView && (
         <div className="header">
           <button
-            onClick={() => navigate('/rooms')} // Перенаправление с помощью navigate
+            onClick={() => navigate('/rooms')} 
             className="room-list-button"
           >
             Список кабинетов
@@ -617,7 +593,11 @@ function App() {
               step={15}
               min={new Date(0, 0, 0, 7, 0, 0)}
               max={new Date(0, 0, 0, 23, 0, 0)}
-              style={{ height: isDayView ? 450 : 400, margin: '0 25px' }}
+              style={{
+                height: isDayView ? 500 : 500,
+                width: '75%',          
+                margin: '0 auto',     
+            }}              
               views={['month', 'day']}
               defaultView="month"
               view={view}
@@ -646,15 +626,15 @@ function App() {
               slotPropGetter={(date, resourceId) => {
                 const momentDate = moment(date);
                 const now = moment();
-                 if (calendarDisplayStates[index].view === 'day') { // Проверяем, что находимся во вкладке "День"
-                    const nowWithPadding = moment().subtract(1, 'minute'); // Небольшой запас
-                    if (momentDate.isBefore(nowWithPadding)) { // Проверяем, если время слота раньше текущего
-                       return { className: 'rbc-custom-slot past-slot', style: { cursor: 'not-allowed' } }; // Добавляем класс и стиль курсора
+                 if (calendarDisplayStates[index].view === 'day') { 
+                    const nowWithPadding = moment().subtract(1, 'minute'); 
+                    if (momentDate.isBefore(nowWithPadding)) { 
+                       return { className: 'rbc-custom-slot past-slot', style: { cursor: 'not-allowed' } }; 
                     }
-                    return { className: 'rbc-custom-slot', style: { cursor: 'pointer' } }; // Для будущих слотов курсорpointer
+                    return { className: 'rbc-custom-slot', style: { cursor: 'pointer' } }; 
                  }
-                 // Логика для month view остается без изменений
-                 if (!calendarDisplayStates.some(state => state.view === 'day')) { // Применяем только если ни один календарь не в day view
+
+                 if (!calendarDisplayStates.some(state => state.view === 'day')) { 
                       const calendarViewDate = moment(calendarDisplayStates[index].date);
                       if (momentDate.isBefore(now, 'day')) {
                         return { className: 'past-day' };
@@ -663,22 +643,30 @@ function App() {
                          return { className: 'selectable-day' };
                       }
                  }
-                 return { className: 'rbc-custom-slot' }; // Класс по умолчанию
+                 return { className: 'rbc-custom-slot' }; 
                }}
             />
 
             {isFormVisible && selectedMonthIndex === index && (
-              <div ref={formRef} className={`event-form-container ${isFormVisible ? 'visible' : ''}`} style={{
+              <div ref={formRef} className={`event-form-container ${isFormVisible ? 'visible' : ''}`} 
+              style={{
+                width: '75%', 
+                margin: '20px auto', 
+                textAlign: 'center',
                 padding: '20px',
                 backgroundColor: '#f9f9f9',
                 border: '1px solid #ddd',
                 borderRadius: '5px',
-                margin: '20px',
                 transition: 'opacity 0.3s ease-in-out',
                 opacity: isFormVisible ? 1 : 0,
                 pointerEvents: isFormVisible ? 'auto' : 'none'
-              }}>
-                <form onSubmit={(e) => { e.preventDefault(); handleAddEvent(); }} style={{ textAlign: 'center' }}>
+              }}
+              >
+                <form onSubmit={(e) => { e.preventDefault(); handleAddEvent(); }} 
+                style={{
+                      textAlign: 'center', 
+                  }}
+                  >
                   <div className="date-inputs" style={{ display: 'flex', justifyContent: 'space-around', marginBottom: '20px' }}>
                     <div className="date-input" style={{ flex: 1, marginRight: '10px' }}>
                       <label>Название мероприятия</label>
@@ -688,7 +676,6 @@ function App() {
                         value={eventTitle}
                         onChange={(e) => setEventTitle(e.target.value)}
                         required
-                        style={{ width: '100%', boxSizing: 'border-box' }}
                       />
                     </div>
                     <div className="date-input" style={{ flex: 1, marginLeft: '10px' }}>
@@ -699,7 +686,6 @@ function App() {
                         value={eventName}
                         onChange={(e) => setEventName(e.target.value)}
                         required
-                        style={{ width: '100%', boxSizing: 'border-box' }}
                       />
                     </div>
                   </div>
@@ -712,9 +698,8 @@ function App() {
                         value={eventStart}
                         onChange={handleStartDateChange}
                         required
-                        style={{ width: '100%', boxSizing: 'border-box' }}
                       />
-                      {!isStartDateValid && eventStart && <p style={{ color: 'red', fontSize: '12px', margin: '5px 0 0 0' }}>Неверный формат даты</p>}
+                      {!isStartDateValid && eventStart && <p style={{ color: 'red', fontSize: '18px', margin: '5px 0 0 0' }}>Неверный формат даты(гггг.мм.дд чч.мм)</p>}
                     </div>
                     <div className="date-input" style={{ flex: 1, marginLeft: '10px' }}>
                       <label>Дата окончания</label>
@@ -724,7 +709,6 @@ function App() {
                         value={eventEnd}
                         onChange={handleEndDateChange}
                         required
-                        style={{ width: '100%', boxSizing: 'border-box' }}
                       />
                       {!isEndDateValid && eventEnd && <p style={{ color: 'red', fontSize: '18px', margin: '5px 0 0 0' }}>Неверный формат даты(гггг.мм.дд чч.мм)</p>}
                     </div>

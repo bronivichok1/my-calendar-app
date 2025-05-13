@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #fcfaf5c7;
 }
 
 label{
@@ -18,8 +19,13 @@ code {
 }
 
 h2{
-  margin-left: 25px;
-  }
+  text-align: center;
+  flex: 1;
+  flex-grow: 1;
+}
+h3{
+  margin-left: 0px;
+}
 
 .input_1{
   margin-left: 25px;
@@ -39,14 +45,14 @@ h2{
 
 .date-inputs {
   display: flex;
-  justify-content: center; 
+  justify-content: center; /* Центрируем содержимое по горизонтали */
   margin-bottom: 20px;
-  width: 100%; 
+  width: 100%; /* Полная ширина родителя */
 }
 
 .date-input {
-  flex: 1; 
-  margin: 0 2%; 
+  flex: 0 0 50%; /* Фиксированная ширина 50% */
+  margin: 0 10px; /* Отступы по бокам */
 }
 
 .date-input label {
@@ -56,13 +62,12 @@ h2{
 }
 
 .date-input input {
-  width: 75%; 
+  width: 75%; /* Занимает 100% ширины родителя (.date-input) */
   height: 25px;
   font-size: 1.2em;
   padding: 5px; 
   box-sizing: border-box; 
 }
-
 
 .frame {
   width: 90%;
@@ -70,7 +75,8 @@ h2{
   text-align: center;
 }
 button {
-  margin: 20px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 .custom-btn {
   border-width: 1px;
@@ -301,12 +307,12 @@ button {
 }
 
 .rbc-month-view .rbc-row-bg .rbc-day-bg.selectable-day:hover {
-  background-color: rgba(169, 217, 236, 0.6) !important; /* Светло-серый при наведении */
+  background-color: rgba(255, 185, 72, 0.932) !important; /* Светло-серый при наведении */
   transition: background-color 0.3s ease !important; /* Плавный переход */
   cursor: pointer !important;
 }
 .active-day:hover{
-  background-color: rgba(128, 128, 128, 0.2) !important; /* Светло-серый при наведении */
+  background-color: rgba(197, 231, 245, 0.836) !important; /* Светло-серый при наведении */
   transition: background-color 0.3s ease !important; /* Плавный переход */
   cursor: pointer !important;
 }
@@ -331,7 +337,7 @@ button {
 }
 
 .past-day {
-  background-color: rgba(128, 128, 128, 0.2); /* Серый цвет для прошедших дней */
+  background-color: rgba(230, 230, 230); /* Серый цвет для прошедших дней */
   cursor: not-allowed; /* Курсор "недоступен" */
   pointer-events: none;
 }
@@ -339,7 +345,7 @@ button {
 /* Увеличенный дизайн для кнопки "Назад" */
 .btn-back {
   /* Основные стили */
-  background-color: #f0f0f073; /* Светло-серый фон */
+  background-color: #ffffff; /* Светло-серый фон */
   border: 1px solid #000000; /* Серая граница */
   color: #333333; /* Темно-серый текст */
   padding: 5px 15px; /* УВЕЛИЧЕННЫЕ внутренние отступы */
@@ -358,10 +364,10 @@ button {
 
 /* Стили при наведении (hover) */
 .btn-back:hover {
-  background-color: #94949483; /* Фон становится немного темнее */
-  border-color: #000000; /* Граница становится немного темнее */
-  color: #222222; /* Текст становится немного темнее */
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); /* Тень стала немного больше */
+  background-color: #ffffff; /* Фон становится немного темнее */
+  border-color: #ff9100; /* Граница становится немного темнее */
+  color: #ff9100; /* Текст становится немного темнее */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3); /* Тень стала немного больше */
 }
 
 /* Стили при активном состоянии (active) - когда кнопка нажата */
@@ -384,7 +390,7 @@ button {
 }
 
 .rbc-time-content .rbc-timeslot-group:hover {
-  background-color: rgba(128, 128, 128, 0.2); /* Серый цвет с 20% прозрачностью */
+  background-color: rgba(240, 173, 28, 0.836); /* Серый цвет с 20% прозрачностью */
   cursor: pointer; /* Изменяем курсор, чтобы показать интерактивность */
 }
 
@@ -430,9 +436,6 @@ button {
   display: flex;
   justify-content: flex-start; /* Выравнивание по левому краю */
   align-items: flex-start; /* Выравнивание по верхнему краю */
-
-  /* Удалены: width: 100%; */
-  /* Удалены: min-height: 60px; (лучше управлять в представлениях дня/недели/месяца) */
 }
 
 /* Стили событий при наведении */
@@ -467,25 +470,14 @@ button {
   justify-content: space-between; /* Распределяем пространство между элементами */
 }
 
-/* Псевдо-элемент для балансировки пространства слева */
-/* Он будет иметь ту же ширину, что и .header-container, */
-/* чтобы визуально центрировать .header-title */
 .header::before {
   content: ""; /* Обязательное свойство для псевдо-элементов */
-  /* Установите ширину, соответствующую ожидаемой ширине .header-container */
-  /* Вам может потребоваться настроить это значение, */
-  /* измерив фактическую ширину блока справа в браузере */
-  /* Значение от 150px до 250px может быть хорошей отправной точкой. */
   width: 10%; /* Пример ширины, настройте по необходимости */
   flex-shrink: 0; /* Запрещаем этому элементу сжиматься */
 }
 
 /* Стили для заголовка аудитории */
 .header-title {
-  /* Удаляем устаревшее абсолютное позиционирование */
-  /* position: absolute; */
-  /* top: 30%; */
-  /* left: 47%; */
   flex-grow: 1; /* Заголовок занимает всё доступное пространство */
   text-align: center;
   font-size: 24px;
@@ -495,16 +487,8 @@ button {
 
 /* Стили для контейнера с именем пользователя и кнопкой Выход */
 .header-container {
-  /* Удаляем устаревшее абсолютное позиционирование */
-  /* position: absolute; */
-  /* top: 10%; */
-  /* left: 80%; */
-  
   display: flex; /* Делаем этот контейнер флекс-контейнером */
   align-items: center; /* Вертикальное выравнивание элементов внутри контейнера */
-  /* Установите фиксированную ширину или минимальную ширину, */
-  /* соответствующую ширине псевдо-элемента ::before */
-  /* Эта ширина должна быть достаточной для размещения .event-name и кнопки .logout-button */
   width: 200px; /* Пример ширины, настройте по необходимости (должна совпадать с ::before) */
   flex-shrink: 0; /* Запрещаем этому элементу сжиматься */
   justify-content: flex-end; /* Выравниваем элементы внутри контейнера по правому краю */
@@ -523,16 +507,9 @@ button {
   width: 100%; /* Занимает всю доступную ширину */
   display: flex; /* Используем Flexbox для удобного центрирования */
   flex-direction: column; /* Выравниваем элементы Flexbox вертикально */
-
-  /* Существующие стили */
   justify-content: center; /* Центрируем содержимое по вертикали (при flex-direction: column) */
   align-items: center; /* Центрируем содержимое по горизонтали (при flex-direction: column) */
-  background-color: #f0f4f8; /* Нежный фон страницы */
-
-  /* Убедитесь, что body или родительские элементы не ограничивают высоту */
-  /* Обычно в глобальных стилях добавляют:
-     html, body, #root { height: 100%; margin: 0; padding: 0; }
-  */
+  background-color: #f0f4f8; 
 }
 
 /* Контейнер для кнопок - остается как есть */
@@ -600,10 +577,14 @@ button {
 
 /* Стили для прошедших временных слотов в Day view */
 .past-slot {
-  background-color: rgba(0, 0, 0, 0.123) !important; /* Более темный серый, используйте !important если нужно переопределить стили библиотеки */
+  background-color: rgba(230, 230, 230) !important; /* Более темный серый, используйте !important если нужно переопределить стили библиотеки */
   cursor: not-allowed !important; /* Убедимся, что курсор действительно меняется */
 }
 .past-slot:hover {
-  background-color: rgba(0, 0, 0, 0.123)  !important; /* Более темный серый, используйте !important если нужно переопределить стили библиотеки */
+  background-color: rgba(230, 230, 230)  !important; /* Более темный серый, используйте !important если нужно переопределить стили библиотеки */
   cursor: not-allowed !important; /* Убедимся, что курсор действительно меняется */
+}
+
+.rbc-day-slot .rbc-time-slot{
+  border-top: none  !important;
 }
