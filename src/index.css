@@ -27,6 +27,12 @@ h3{
   margin-left: 0px;
 }
 
+h4{
+  text-align: center;
+  flex: 1;
+  flex-grow: 1;
+}
+
 .input_1{
   margin-left: 25px;
 }

@@ -554,6 +554,7 @@ function App() {
                )}
                {isDayView && (
                   <>
+                   <div style={{ width: '15%' }}></div>
                    <h2 style={{ textAlign: 'center', fontWeight: 'bold', flexGrow: 1 }}>
                      {moment(date).format('DD MMMM YYYY')}
                     </h2>
