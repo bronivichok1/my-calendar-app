@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './index.css';
 
-const RoomButton = ({ roomNumber }) => {
-  const navigate = useNavigate(); 
+const RoomButton = ({ roomNumber, label }) => {
+  const navigate = useNavigate();
 
   const handleClick = () => {
     navigate(`/?num=${roomNumber}`);
@@ -11,7 +11,7 @@ const RoomButton = ({ roomNumber }) => {
 
   return (
     <button onClick={handleClick} className="room-button">
-      Кабинет №{roomNumber}
+      {label || `Кабинет №${roomNumber}`}
     </button>
   );
 };
@@ -22,7 +22,7 @@ const RoomsList = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
   const statusUrl = `${apiUrl}/auth/status`;
   const authUrl = '/auth';
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -43,7 +43,7 @@ const RoomsList = () => {
         console.error('Failed to check authentication status:', error);
         setIsAuthenticated(false);
       } finally {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
     };
 
@@ -53,14 +53,18 @@ const RoomsList = () => {
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       console.log('User not authenticated, redirecting to login...');
-      navigate(authUrl); 
+      navigate(authUrl);
     }
-  }, [isLoading, isAuthenticated, authUrl, navigate]); 
+  }, [isLoading, isAuthenticated, authUrl, navigate]);
 
   const renderRoomButtons = () => {
-    return Array.from({ length: 5 }, (_, index) => (
+    const roomButtons = Array.from({ length: 5 }, (_, index) => (
       <RoomButton key={index + 1} roomNumber={index + 1} />
     ));
+    roomButtons.push(
+      <RoomButton key={6} roomNumber={6} label="Совет университета" />
+    );
+    return roomButtons;
   };
 
   if (isLoading) {
@@ -68,7 +72,7 @@ const RoomsList = () => {
   }
 
   if (!isAuthenticated) {
-    return null; 
+    return null;
   }
 
   return (

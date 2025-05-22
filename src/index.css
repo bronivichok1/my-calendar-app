@@ -6,9 +6,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #fcfaf5c7;
+  font-size: 16px;
+  line-height: 1.6;
 }
 
-label{
+label {
   font-weight: 700;
   font-size: 18px;
 }
@@ -18,22 +20,23 @@ code {
     monospace;
 }
 
-h2{
+h2 {
   text-align: center;
   flex: 1;
   flex-grow: 1;
 }
-h3{
+
+h3 {
   margin-left: 0px;
 }
 
-h4{
+h4 {
   text-align: center;
   flex: 1;
   flex-grow: 1;
 }
 
-.input_1{
+.input_1 {
   margin-left: 25px;
 }
 
@@ -44,35 +47,35 @@ h4{
 }
 
 .input-row input {
-  flex: 1; 
-  margin: 0 2%; 
-  font-size: 1.2em; 
+  flex: 1;
+  margin: 0 2%;
+  font-size: 1.2em;
 }
 
 .date-inputs {
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   margin-bottom: 20px;
   width: 100%;
 }
 
 .date-input {
   flex: 0 0 50%;
-  margin: 0 10px; 
+  margin: 0 10px;
 }
 
 .date-input label {
-  display: block; 
-  text-align: center; 
-  margin-bottom: 5px; 
+  display: block;
+  text-align: center;
+  margin-bottom: 5px;
 }
 
 .date-input input {
-  width: 75%; 
+  width: 75%;
   height: 25px;
   font-size: 1.2em;
-  padding: 5px; 
-  box-sizing: border-box; 
+  padding: 5px;
+  box-sizing: border-box;
 }
 
 .frame {
@@ -80,10 +83,12 @@ h4{
   margin: 0px auto;
   text-align: center;
 }
+
 button {
   margin-bottom: 20px;
   margin-top: 20px;
 }
+
 .custom-btn {
   border-width: 1px;
   font-size: 16px;
@@ -99,9 +104,9 @@ button {
   transition: all 0.3s ease;
   position: relative;
   display: inline-block;
-   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
-   7px 7px 20px 0px rgba(0,0,0,.1),
-   4px 4px 5px 0px rgba(0,0,0,.1);
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+    7px 7px 20px 0px rgba(0, 0, 0, 0.1),
+    4px 4px 5px 0px rgba(0, 0, 0, 0.1);
   outline: none;
 }
 
@@ -111,6 +116,7 @@ button {
   font-size: 18px;
   font-weight: 700;
 }
+
 .btn-14:after {
   position: absolute;
   content: "";
@@ -122,25 +128,22 @@ button {
   border-radius: 5px;
   background-color: rgba(59, 226, 129, 0.726);
   background-image: linear-gradient(315deg, #24e41daf 0%, #2ee77bb9 74%);
-   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5);
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5);
   transition: all 0.3s ease;
 }
+
 .btn-14:hover {
   color: #000;
 }
+
 .btn-14:hover:after {
   top: auto;
   bottom: 0;
   height: 100%;
 }
+
 .btn-14:active {
   top: 2px;
-}
-
-@media (max-width: 768px) {
-  .rooms-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 .modal-overlay {
@@ -153,79 +156,81 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; 
+  z-index: 1000;
 }
 
 .modal-content {
   background-color: #fff;
-  border-radius: 10px; 
-  padding: 30px;       
-  width: 400px;        
+  border-radius: 10px;
+  padding: 30px;
+  width: 90%; /* Адаптивная ширина модального окна */
+  max-width: 500px; /* Максимальная ширина */
   text-align: center;
-  position: relative;  
+  position: relative;
 }
 
 .close {
   cursor: pointer;
-  position: absolute;  
-  top: 10px;           
-  right: 15px;         
-  font-size: 28px;     
-  color: #333;         
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  color: #333;
 }
 
 .modal-message {
-  font-size: 22px; 
-  margin: 20px 0; 
+  font-size: 22px;
+  margin: 20px 0;
 }
 
 .modal-button {
-  padding: 12px 24px; 
-  background-color: #28a745; 
+  padding: 12px 24px;
+  background-color: #28a745;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 18px; 
-  transition: background-color 0.3s; 
+  font-size: 18px;
+  transition: background-color 0.3s;
 }
 
 .modal-button:hover {
-  background-color: #218838; 
+  background-color: #218838;
 }
+
 .modal-button.cancel {
   background-color: red;
 }
 
 .custom-event {
-  position: relative; 
-  background: #3174ad; 
+  position: relative;
+  background: #3174ad;
   color: white;
-  padding: 10px; 
+  padding: 10px;
   border-radius: 5px;
   margin-bottom: 10px;
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  justify-content: center; 
-  height: auto; 
-  min-height: 60px; 
-  box-sizing: border-box; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  min-height: 60px;
+  box-sizing: border-box;
 }
 
 .delete-button {
-  background: rgba(255, 0, 0, 0.6); 
-  color: white; 
-  border: none; 
-  border-radius: 5px; 
-  cursor: pointer; 
-  padding: 5px 10px; 
-  font-size: 14px; 
-  margin-top: 10px; 
+  background: rgba(255, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 14px;
+  margin-top: 10px;
 }
 
 .delete-button:hover {
-  background: rgba(255, 0, 0, 0.9); 
+  background: rgba(255, 0, 0, 0.9);
 }
 
 .auth-container {
@@ -235,10 +240,9 @@ button {
   justify-content: center;
   height: 100vh;
   background-color: #f0f0f0;
- }
- 
+}
 
- .auth-form {
+.auth-form {
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -246,52 +250,46 @@ button {
   border-radius: 5px;
   background-color: #fff;
   width: 300px;
- }
- 
+}
 
- .form-group {
+.form-group {
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
- }
- 
+}
 
- .form-group label {
+.form-group label {
   margin-bottom: 5px;
   font-weight: bold;
- }
- 
+}
 
- .form-group input {
+.form-group input {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
- }
- 
+}
 
- .auth-form button {
+.auth-form button {
   padding: 10px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
- }
- 
+}
 
- .auth-form button:hover {
+.auth-form button:hover {
   background-color: #0056b3;
- }
- 
+}
 
- .error-message {
+.error-message {
   color: red;
   margin-bottom: 10px;
   padding: 10px;
   border: 1px solid red;
   background-color: #ffe6e6;
   border-radius: 4px;
- }
+}
 
 .logout-button {
   background-color: #c53030;
@@ -303,31 +301,6 @@ button {
 }
 
 .event-form-container {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
-}
-
-.event-form-container.active {
-  max-height: 500px; 
-}
-
-.rbc-month-view .rbc-row-bg .rbc-day-bg.selectable-day:hover {
-  background-color: rgba(255, 185, 72, 0.932) !important; 
-  transition: background-color 0.3s ease !important; 
-  cursor: pointer !important;
-}
-.active-day:hover{
-  background-color: rgba(197, 231, 245, 0.836) !important; 
-  transition: background-color 0.3s ease !important; 
-  cursor: pointer !important;
-}
- .rbc-day-bg.highlighted-date {
-  background-color: rgba(169, 217, 236, 0.836); 
-  transition: background-color 0.5s ease;
-}
-
- .event-form-container {
   padding: 20px;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
@@ -335,68 +308,85 @@ button {
   margin: 20px;
   overflow: hidden;
   max-height: 0;
-  transition: max-height 1.5s ease-in-out; 
+  transition: max-height 1.5s ease-in-out;
 }
 
- .event-form-container.visible {
-  max-height: 500px; 
+.event-form-container.visible {
+  max-height: 500px;
+}
+
+.rbc-month-view .rbc-row-bg .rbc-day-bg.selectable-day:hover {
+  background-color: rgba(255, 185, 72, 0.932) !important;
+  transition: background-color 0.3s ease !important;
+  cursor: pointer !important;
+}
+
+.active-day:hover {
+  background-color: rgba(197, 231, 245, 0.836) !important;
+  transition: background-color 0.3s ease !important;
+  cursor: pointer !important;
+}
+
+.rbc-day-bg.highlighted-date {
+  background-color: rgba(169, 217, 236, 0.836);
+  transition: background-color 0.5s ease;
 }
 
 .past-day {
-  background-color: rgba(230, 230, 230); 
-  cursor: not-allowed; 
+  background-color: rgba(230, 230, 230);
+  cursor: not-allowed;
   pointer-events: none;
 }
 
 .btn-back {
-  background-color: #ffffff; 
+  background-color: #ffffff;
   border: 1px solid #000000;
-  color: #333333; 
-  padding: 5px 15px; 
-  text-align: center; 
-  text-decoration: none; 
-  display: inline-block; 
-  font-size: 20px; 
-  margin: 8px 4px; 
-  transition-duration: 0.3s; 
-  cursor: pointer; 
-  border-radius: 5px; 
-  min-width: 240px; 
-  box-sizing: border-box; 
-  line-height: 1.5; 
+  color: #333333;
+  padding: 5px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin: 8px 4px;
+  transition-duration: 0.3s;
+  cursor: pointer;
+  border-radius: 5px;
+  min-width: 240px;
+  box-sizing: border-box;
+  line-height: 1.5;
 }
 
 .btn-back:hover {
-  background-color: #ffffff; 
-  border-color: #ff9100; 
-  color: #ff9100; 
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3); 
+  background-color: #ffffff;
+  border-color: #ff9100;
+  color: #ff9100;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
 }
 
 .btn-back:active {
-  background-color: #cccccc; 
-  border-color: #999999; 
-  box-shadow: none; 
-  transform: translateY(1px); 
+  background-color: #cccccc;
+  border-color: #999999;
+  box-shadow: none;
+  transform: translateY(1px);
 }
 
 .btn-back:disabled {
-  opacity: 0.6; 
-  cursor: not-allowed; 
-  background-color: #f0f0f0; 
-  border-color: #cccccc; 
-  color: #aaaaaa; 
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #f0f0f0;
+  border-color: #cccccc;
+  color: #aaaaaa;
   box-shadow: none;
   transform: none;
 }
 
 .rbc-time-content .rbc-timeslot-group:hover {
-  background-color: rgba(240, 173, 28, 0.836); 
-  cursor: pointer; 
+  background-color: rgba(240, 173, 28, 0.836);
+  cursor: pointer;
 }
 
 .rbc-time-content .rbc-timeslot-group {
-   transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .rbc-events-container {
@@ -404,75 +394,74 @@ button {
 }
 
 .rbc-events-container .rbc-event {
-   pointer-events: auto;
+  pointer-events: auto;
 }
 
 .rbc-time-header {
-  display: none !important; 
+  display: none !important;
 }
 
 .rbc-event {
-  padding: 10px; 
-  background-color: #3174ad; 
-  color: white; 
-  border-radius: 5px; 
-  border: 1px solid rgba(0, 0, 0, 0.2); 
-  box-sizing: border-box; 
-  line-height: 1.3; 
-  font-size: 18px; 
-  white-space: normal; 
-  overflow: hidden; 
-  text-overflow: ellipsis; 
-  word-wrap: break-word; 
-  overflow-wrap: break-word; 
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); 
+  padding: 10px;
+  background-color: #3174ad;
+  color: white;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  line-height: 1.3;
+  font-size: 18px;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   display: flex;
-  justify-content: flex-start; 
-  align-items: flex-start; 
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .rbc-event:hover {
-  background-color: #4a90e2; 
-  color: white; 
-  cursor: pointer; 
+  background-color: #4a90e2;
+  color: white;
+  cursor: pointer;
 }
 
 .rbc-day-view .rbc-event,
 .rbc-week-view .rbc-event {
-  min-height: 20px; 
-  margin: 2px 1px; 
-
+  min-height: 20px;
+  margin: 2px 1px;
 }
 
 .rbc-month-view .rbc-event {
-  min-height: 80px !important; 
-  margin: 2px; 
+  min-height: 80px !important;
+  margin: 2px;
 }
 
 .header {
-  position: sticky; 
+  position: sticky;
   top: 0;
-  background-color: #D0E6F1;
+  background-color: #d0e6f1;
   color: #000000;
   padding: 15px;
   z-index: 1000;
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between; 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .header::before {
-  content: ""; 
-  width: 4%; 
-  flex-shrink: 0; 
+  content: "";
+  width: 4%;
+  flex-shrink: 0;
 }
 
 .header-title {
-  flex-grow: 1; 
+  flex-grow: 1;
   text-align: center;
   font-size: 24px;
-  margin: 0; 
-  text-align: center; 
+  margin: 0;
+  text-align: center;
 }
 
 .header-container {
@@ -495,7 +484,7 @@ button {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #f0f4f8; 
+  background-color: #f0f4f8;
 }
 
 .rooms-grid-unique {
@@ -511,16 +500,15 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f0f4f8; 
+  background-color: #f0f4f8;
 }
 
-
 .room-button {
-  background-color: #D0E6F1;
+  background-color: #d0e6f1;
   color: #2f5e94;
   font-family: 'Roboto', sans-serif;
-  font-size: 22px; 
-  padding: 30px 20px; 
+  font-size: 22px;
+  padding: 30px 20px;
   margin: 8px;
   border-color: rgba(128, 128, 128, 0.479);
   border-radius: 4px;
@@ -530,44 +518,243 @@ button {
 }
 
 .room-button:hover {
-  background-color: #F5A623;
+  background-color: #f5a623;
   color: white;
 }
 
 .room-list-button {
-  padding: 10px 15px; 
-  background-color: #F5A623; 
-  color: white; 
-  border: none; 
-  border-radius: 5px; 
-  font-size: 16px; 
-  cursor: pointer; 
-  margin-right: auto; 
-  transition: background-color 0.3s; 
+  padding: 10px 15px;
+  background-color: #f5a623;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: auto;
+  transition: background-color 0.3s;
 }
 
 .room-list-button:hover {
-  background-color: #ff9d00; 
+  background-color: #ff9d00;
 }
 
 .header-info {
-  display: flex; 
-  align-items: center; 
+  display: flex;
+  align-items: center;
 }
 
 .logout-button:hover {
-  background-color: #c82333b2; 
+  background-color: #c82333b2;
 }
 
 .past-slot {
-  background-color: rgba(230, 230, 230) !important; 
-  cursor: not-allowed !important; 
-}
-.past-slot:hover {
-  background-color: rgba(230, 230, 230)  !important; 
-  cursor: not-allowed !important; 
+  background-color: rgba(230, 230, 230) !important;
+  cursor: not-allowed !important;
 }
 
-.rbc-day-slot .rbc-time-slot{
-  border-top: none  !important;
+.past-slot:hover {
+  background-color: rgba(230, 230, 230) !important;
+  cursor: not-allowed !important;
+}
+
+.rbc-day-slot .rbc-time-slot {
+  border-top: none !important;
+}
+
+/* Media Queries для адаптивности */
+@media (max-width: 999px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header-title {
+    margin-bottom: 10px;
+  }
+
+  .header-info {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .event-name {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .room-list-button {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .date-inputs {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .date-input {
+    flex: 0 0 100%;
+    margin: 5px 0;
+    width: 100%;
+  }
+
+  .date-input input {
+    width: 100%;
+    height: 35px;
+    font-size: 1.2em;
+    padding: 5px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  .frame {
+    width: 90%;
+    margin: 0px auto;
+    text-align: center;
+  }
+
+  .custom-btn {
+    border-width: 1px;
+    font-size: 16px;
+    width: 90%;
+    color: #000000;
+    border-color: #858080;
+    border-radius: 5px;
+    padding: 12px 25px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+      7px 7px 20px 0px rgba(0, 0, 0, 0.1),
+      4px 4px 5px 0px rgba(0, 0, 0, 0.1);
+    outline: none;
+  }
+
+  .rooms-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .room-button {
+    width: 100%;
+    font-size: 18px;
+  }
+
+  .rbc-month-view .rbc-event {
+    min-height: 50px !important;
+    font-size: 14px;
+  }
+    .modal-content {
+    width: 95%; /* Максимальная ширина модального окна на мобильных */
+    max-width: none; /* Убираем ограничение максимальной ширины */
+  }
+
+  .date-input input {
+    width: 100%; /* Инпуты занимают всю ширину контейнера */
+  }
+}
+
+.event-day .rbc-button-link {
+  background-color: orange;
+  color: white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+
+
+.btn-help {
+  background-color: rgba(250, 250, 250, 0.836) ; /* Light Blue */
+  border: 1px solid #000000;
+  color: #333333;
+  padding: 5px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-flex; /* Changed to inline-flex */
+  align-items: center; /* Vertically align icon and text */
+  font-size: 20px;
+  margin: 8px 4px;
+  transition-duration: 0.3s;
+  cursor: pointer;
+  border-radius: 5px;
+  min-width: 240px;
+  box-sizing: border-box;
+  line-height: 1.5;
+  position: relative; /* For pseudo-element positioning */
+  overflow: hidden; /* Clip the pseudo-element */
+}
+
+.btn-help::before {
+  content: "?"; /* Empty content */
+  background-color: #3174ad; /* Dark Blue */
+  color: white;
+  width: 20%; /* 20% of the button width */
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.btn-help span {
+  margin-left: 20%; /* Push the text to the right */
+  display: block;
+  width: 80%;
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.btn-help:hover {
+  background-color: rgba(255, 255, 255, 0.836);
+  border-color: #ff9100;
+  color: #ff9100;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.btn-help:active {
+  background-color: rgba(255, 255, 255, 0.836);
+  border-color: #999999;
+  box-shadow: none;
+  transform: translateY(1px);
+}
+
+.btn-help:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #f0f0f0;
+  border-color: #cccccc;
+  color: #aaaaaa;
+  box-shadow: none;
+  transform: none;
+}
+
+.input-error {
+  border: 2px solid rgb(241, 96, 96);
+  box-shadow: 0 0 5px red;
+  background-color: #ffffff; /* Optional: Keep the red background */
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin: 5px 0 0 0;
+}
+.highlighted-range {
+  background-color: rgba(128, 128, 128, 0.3); /* пример цвета */
+  color: black;
+  border-radius: 0px;
+  border: none;
 }
