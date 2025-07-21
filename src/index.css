@@ -163,8 +163,8 @@ button {
   background-color: #fff;
   border-radius: 10px;
   padding: 30px;
-  width: 90%; /* Адаптивная ширина модального окна */
-  max-width: 500px; /* Максимальная ширина */
+  width: 90%;
+  max-width: 500px;
   text-align: center;
   position: relative;
 }
@@ -561,7 +561,6 @@ button {
   border-top: none !important;
 }
 
-/* Media Queries для адаптивности */
 @media (max-width: 999px) {
   .header {
     flex-direction: column;
@@ -650,12 +649,12 @@ button {
     font-size: 14px;
   }
     .modal-content {
-    width: 95%; /* Максимальная ширина модального окна на мобильных */
-    max-width: none; /* Убираем ограничение максимальной ширины */
+    width: 95%;
+    max-width: none;
   }
 
   .date-input input {
-    width: 100%; /* Инпуты занимают всю ширину контейнера */
+    width: 100%;
   }
 }
 
@@ -671,16 +670,15 @@ button {
   border: none;
 }
 
-
 .btn-help {
-  background-color: rgba(250, 250, 250, 0.836) ; /* Light Blue */
+  background-color: rgba(250, 250, 250, 0.836) ;
   border: 1px solid #000000;
   color: #333333;
   padding: 5px 15px;
   text-align: center;
   text-decoration: none;
-  display: inline-flex; /* Changed to inline-flex */
-  align-items: center; /* Vertically align icon and text */
+  display: inline-flex;
+  align-items: center;
   font-size: 20px;
   margin: 8px 4px;
   transition-duration: 0.3s;
@@ -689,15 +687,15 @@ button {
   min-width: 240px;
   box-sizing: border-box;
   line-height: 1.5;
-  position: relative; /* For pseudo-element positioning */
-  overflow: hidden; /* Clip the pseudo-element */
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-help::before {
-  content: "?"; /* Empty content */
-  background-color: #3174ad; /* Dark Blue */
+  content: "?";
+  background-color: #3174ad;
   color: white;
-  width: 20%; /* 20% of the button width */
+  width: 20%;
   height: 100%;
   position: absolute;
   left: 0;
@@ -709,7 +707,7 @@ button {
 }
 
 .btn-help span {
-  margin-left: 20%; /* Push the text to the right */
+  margin-left: 20%;
   display: block;
   width: 80%;
   text-align: center;
@@ -742,9 +740,14 @@ button {
 }
 
 .input-error {
-  border: 2px solid rgb(241, 96, 96);
+  border: 2px solid rgb(241, 96, 96)!important;
   box-shadow: 0 0 5px red;
-  background-color: #ffffff; /* Optional: Keep the red background */
+  background-color: #ffffff;
+}
+.input-error:focus {
+  border:none;
+  box-shadow: 0 0 5px red;
+  background-color: #ffffff;
 }
 
 .error-message {
@@ -753,8 +756,60 @@ button {
   margin: 5px 0 0 0;
 }
 .highlighted-range {
-  background-color: rgba(128, 128, 128, 0.3); /* пример цвета */
+  background-color: rgba(128, 128, 128, 0.3);
   color: black;
   border-radius: 0px;
   border: none;
+}
+
+.rbc-day-bg {
+  position: relative;
+  padding-right: 12px;
+}
+
+.rbc-day-bg.has-event::before {
+  content: "";
+  display: inline-block;
+  width: 8px;  
+  height: 8px;
+  background-color: #3174ad;
+  border-radius: 50%;
+  position: absolute;
+  right: 25px;  
+  top: 10px;
+  z-index: 1;  
+  animation: fancyPulse 2.5s infinite ease-in-out;
+}
+
+@keyframes fancyPulse {
+  0% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(49, 116, 173, 0.7);
+  }
+  70% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 0 5px rgba(49, 116, 173, 0);
+  }
+  100% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(49, 116, 173, 0);
+  }
+}
+
+@media (max-width: 768px) {
+  .rbc-day-bg {
+    padding-right: 10px;
+  }
+  
+  .rbc-day-bg.has-event::before {
+    width: 8px;
+    height: 8px;
+    right: 25px;
+    top: 7px;
+  }
+  
+  .rbc-date-cell {
+    font-size: 0.8em;
+    padding: 1px 0 1px 3px;
+  }
 }

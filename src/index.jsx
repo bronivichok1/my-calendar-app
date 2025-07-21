@@ -5,7 +5,7 @@ import './index.css';
 import App from './App'; 
 import RoomsList from './RoomsList'
 import Auth from './Auth'
-
+import Instruction from './Instructions';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -14,6 +14,7 @@ root.render(
     <Route path="/" element={<App />}/>
     <Route path="/rooms" element={<RoomsList />}/>
     <Route path="/auth" element={<Auth />}/>
+    <Route path="/instruction" element={<Instruction />}/>
     </Routes>
     </BrowserRouter>
 );

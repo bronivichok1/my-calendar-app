@@ -621,6 +621,7 @@ function App() {
         setHighlightedRange(null);
       }
     };
+
     return (
         <div className="App">
             {!isAnyCalendarInDayView && (
@@ -647,53 +648,59 @@ function App() {
                 const isVisible = isAnyCalendarInDayView ? isDayView : true;
                 
                 const dayPropGetter = (date) => {
-                  const momentDate = moment(date);
-                  let className = '';
-                  const now = moment();
-                  if (highlightedRange) {
+                    const momentDate = moment(date);
+                    let className = '';
+                    const now = moment();
+                    
+                    if (highlightedRange) {
                       const start = moment(highlightedRange.start);
                       const end = moment(highlightedRange.end);
                       if (momentDate.isBetween(start, end, null, '[]')) {
-                          className += ' highlighted-range';
+                        className += ' highlighted-range';
                       }
-                  }
-                  const hasEvents = events.some(
+                    }
+                    
+                    // Проверяем, есть ли события в этот день
+                    const hasEvents = events.some(
                       (event) =>
-                          moment(event.start).isSame(date, 'day') ||
-                          moment(event.end).isSame(date, 'day')
-                  );
-                  if (hasEvents) {
+                        moment(event.start).isSame(date, 'day') ||
+                        moment(event.end).isSame(date, 'day')
+                    );
+                    
+                    if (hasEvents) {
                       className += ' has-event';
-                  }
-                  if (momentDate.isBefore(now, 'day')) {
+                    }
+                    
+                    if (momentDate.isBefore(now, 'day')) {
                       className += ' past-day';
-                  } else {
+                    } else {
                       const calendarViewDate = moment(calendarDisplayStates[index].date);
                       if (
-                          calendarDisplayStates[index].view === 'day' &&
-                          momentDate.isSame(calendarViewDate, 'day')
+                        calendarDisplayStates[index].view === 'day' &&
+                        momentDate.isSame(calendarViewDate, 'day')
                       ) {
-                          className += ' active-day';
+                        className += ' active-day';
                       }
                       if (
-                          !isDayView &&
-                          selectedMonthIndex === index &&
-                          highlightedDate &&
-                          momentDate.isSame(highlightedDate, 'day')
+                        !isDayView &&
+                        selectedMonthIndex === index &&
+                        highlightedDate &&
+                        momentDate.isSame(highlightedDate, 'day')
                       ) {
-                          className += ' highlighted-date';
+                        className += ' highlighted-date';
                       }
                       if (
-                          !isDayView &&
-                          momentDate.isSame(calendarDisplayStates[index].date, 'month')
+                        !isDayView &&
+                        momentDate.isSame(calendarDisplayStates[index].date, 'month')
                       ) {
-                          if (!momentDate.isBefore(now, 'day')) {
-                              className += ' selectable-day';
-                          }
+                        if (!momentDate.isBefore(now, 'day')) {
+                          className += ' selectable-day';
+                        }
                       }
-                  }
-                  return { className: className.trim() };
-              };
+                    }
+                    
+                    return { className: className.trim() };
+                  };
                 return isVisible ? (
                     <div key={index} style={{ margin: '20px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '0 25px 10px' }}>

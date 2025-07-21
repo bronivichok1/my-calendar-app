@@ -1,0 +1,100 @@
+.instruction-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 20px;
+  }
+  
+  .instruction-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    max-width: 800px;
+    width: 100%;
+  }
+  
+  .instruction-title {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.2rem;
+  }
+  
+  .instruction-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  
+  .step-number {
+    background: #3498db;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    flex-shrink: 0;
+    font-size: 1.2rem;
+  }
+  
+  .step-content {
+    flex-grow: 1;
+  }
+  
+  .step-content h3 {
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.3rem;
+  }
+  
+  .step-content p {
+    color: #7f8c8d;
+    margin: 0;
+    line-height: 1.6;
+    font-size: 1.05rem;
+
+  }
+  
+  .instruction-footer {
+    margin-top: 50px;
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #ecf0f1;
+  }
+  
+  .instruction-footer p {
+    color: #7f8c8d;
+    margin-bottom: 20px;
+  }
+  
+  .start-button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+  }
+  
+  .start-button:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+  }
