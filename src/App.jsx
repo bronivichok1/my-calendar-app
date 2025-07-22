@@ -6,11 +6,14 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './index.css';
 import Modal from './Modal.jsx';
+import { FaQuestionCircle } from 'react-icons/fa';
 
 moment.locale('ru');
 const localizer = momentLocalizer(moment);
 
 function App() {
+
+
     const query = new URLSearchParams(useLocation().search);
     const number = query.get('num') || "1";
 
@@ -47,6 +50,9 @@ function App() {
     const [eventStartError, setEventStartError] = useState('');
     const [eventEndError, setEventEndError] = useState('');
     const [highlightedRange, setHighlightedRange] = useState(null);
+
+    const [selectedSlot, setSelectedSlot] = useState(null);
+    const [isInitialDayView, setIsInitialDayView] = useState(true);
 
     const PATH = process.env.REACT_APP_API_URL;
     const formRef = useRef(null);
@@ -136,7 +142,14 @@ function App() {
 
         fetchEvents();
 
-    }, [number, PATH, isAuthenticated]);
+        if (eventStart && eventEnd) {
+            const start = new Date(eventStart);
+            const end = new Date(eventEnd);
+            if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+              setSelectedSlot({ start, end });
+            }
+        }
+    }, [number, PATH, isAuthenticated,eventStart, eventEnd]);
 
     const validateDateFormat = (dateString) => {
         const regex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/;
@@ -148,30 +161,41 @@ function App() {
         setEventStart(value);
         updateHighlightedRange(value, eventEnd);
         setIsStartDateValid(validateDateFormat(value));
+        
         if (!value) {
-            setEventStartError('Поле не должно быть пустым');
+          setEventStartError('Поле не должно быть пустым');
         } else if (!validateDateFormat(value)) {
-            setEventStartError('Неверный формат даты(гггг-мм-дд чч:мм)');
+          setEventStartError('Неверный формат даты(гггг-мм-дд чч:мм)');
+        } else {
+          setEventStartError('');
+          updateCalendarSelection(value, eventEnd); 
         }
-        else {
-            setEventStartError('');
-        }
-    };
-
-    const handleEndDateChange = (e) => {
+      };
+      
+      const handleEndDateChange = (e) => {
         const value = e.target.value;
         setEventEnd(value);
         updateHighlightedRange(eventStart, value);
         setIsEndDateValid(validateDateFormat(value));
+        
         if (!value) {
-            setEventEndError('Поле не должно быть пустым');
+          setEventEndError('Поле не должно быть пустым');
         } else if (!validateDateFormat(value)) {
-            setEventEndError('Неверный формат даты(гггг-мм-дд чч:мм)');
+          setEventEndError('Неверный формат даты(гггг-мм-дд чч:мм)');
+        } else {
+          setEventEndError('');
+          updateCalendarSelection(eventStart, value); 
         }
-        else {
-            setEventEndError('');
+      };
+
+      const updateCalendarSelection = (startValue, endValue) => {
+        const start = new Date(startValue);
+        const end = new Date(endValue);
+        
+        if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+          setSelectedSlot({ start, end });
         }
-    };
+      };
 
     const handleEventTitleChange = (e) => {
         const value = e.target.value;
@@ -345,6 +369,7 @@ function App() {
             setModalMessage(error.message || 'Не удалось добавить событие на сервер.');
             setModalOpen(true);
         } finally {
+            setSelectedSlot(null);
             setEventTitle('');
             setHighlightedDate(null);
             setSelectedDate(null);
@@ -464,54 +489,58 @@ function App() {
         }
     };
 
+
     const handleSlotSelectAndSwitchView = (slotInfo, monthIndex) => {
         const selectedMomentStart = moment(slotInfo.start);
         const now = moment();
         const currentCalendarView = calendarDisplayStates[monthIndex].view;
-
+    
         if (currentCalendarView === 'month' && selectedMomentStart.isBefore(now, 'day')) {
             return;
         }
-
-        if (currentCalendarView === 'day') {
-            const nowWithBuffer = moment().subtract(1, 'minute');
-            if (selectedMomentStart.isBefore(nowWithBuffer)) {
-                return;
-            }
-        }
-
-
+    
         if (currentCalendarView === 'month') {
             setCalendarDisplayStates(prevStates => {
                 const newStates = [...prevStates];
                 newStates[monthIndex] = { view: 'day', date: selectedMomentStart.toDate() };
                 return newStates;
             });
+            
+            setIsFormVisible(true);
+            setSelectedSlot(null);
+            setEventStart('');
+            setEventEnd('');
+            setSelectedMonthIndex(monthIndex);
+            setHighlightedDate(selectedMomentStart.toDate());
+            return;
         }
-
-
-        const formattedStartDate = selectedMomentStart.format('YYYY-MM-DD HH:mm');
-        const formattedEndDate = moment(slotInfo.end).format('YYYY-MM-DD HH:mm');
-
-        setIsFormVisible(true);
-        setSelectedDate(slotInfo.start);
-        setEventStart(formattedStartDate);
-        setEventEnd(formattedEndDate);
-
-        setIsStartDateValid(validateDateFormat(formattedStartDate));
-        setIsEndDateValid(validateDateFormat(formattedEndDate));
-
-        setSelectedMonthIndex(monthIndex);
-        setHighlightedDate(slotInfo.start);
-
-        setTimeout(() => {
-            if (formRef.current) {
-                formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+        if (currentCalendarView === 'day') {
+            const nowWithBuffer = moment().subtract(1, 'minute');
+            if (selectedMomentStart.isBefore(nowWithBuffer)) {
+                return;
             }
-        }, 100);
+    
+            const formattedStartDate = selectedMomentStart.format('YYYY-MM-DD HH:mm');
+            const formattedEndDate = moment(slotInfo.end).format('YYYY-MM-DD HH:mm');
+    
+            setSelectedSlot({ start: slotInfo.start, end: slotInfo.end });
+            setEventStart(formattedStartDate);
+            setEventEnd(formattedEndDate);
+            setIsStartDateValid(validateDateFormat(formattedStartDate));
+            setIsEndDateValid(validateDateFormat(formattedEndDate));
+            setEventEndError(false)
+            setEventStartError(false)
+        }
     };
 
     const handleBackToMonth = (monthIndex) => {
+        setIsInitialDayView(true);
+        setSelectedSlot(null);
+        setEventEndError(false)
+        setEventStartError(false)
+        setEventNameError(false)
+        setEventTitleError(false)
         setCalendarDisplayStates(prevStates => {
             const newStates = [...prevStates];
             newStates[monthIndex] = { view: 'month', date: moment().add(monthIndex, 'months').startOf('month').toDate() };
@@ -622,9 +651,23 @@ function App() {
       }
     };
 
+    const handleInstructionClick = () => {
+        navigate('/instruction');
+    };
+
     return (
         <div className="App">
             {!isAnyCalendarInDayView && (
+            <button 
+            onClick={handleInstructionClick}
+            className="help-button"
+            title="Инструкция"
+            >
+            <FaQuestionCircle size={24} />
+            </button>
+            )}
+            {!isAnyCalendarInDayView && (
+                
                 <div className="header">
                     <button
                         onClick={() => navigate('/rooms')}
@@ -653,54 +696,55 @@ function App() {
                     const now = moment();
                     
                     if (highlightedRange) {
-                      const start = moment(highlightedRange.start);
-                      const end = moment(highlightedRange.end);
-                      if (momentDate.isBetween(start, end, null, '[]')) {
-                        className += ' highlighted-range';
-                      }
+                        const start = moment(highlightedRange.start);
+                        const end = moment(highlightedRange.end);
+                        if (momentDate.isBetween(start, end, null, '[]')) {
+                            className += ' highlighted-range';
+                        }
                     }
                     
-                    // Проверяем, есть ли события в этот день
-                    const hasEvents = events.some(
-                      (event) =>
-                        moment(event.start).isSame(date, 'day') ||
-                        moment(event.end).isSame(date, 'day')
-                    );
-                    
-                    if (hasEvents) {
-                      className += ' has-event';
+                    if (!momentDate.isBefore(now, 'day')) {
+                        const hasEvents = events.some(
+                            (event) =>
+                                moment(event.start).isSame(date, 'day') ||
+                                moment(event.end).isSame(date, 'day')
+                        );
+                        
+                        if (hasEvents) {
+                            className += ' has-event'; 
+                        }
                     }
                     
                     if (momentDate.isBefore(now, 'day')) {
-                      className += ' past-day';
+                        className += ' past-day';
                     } else {
-                      const calendarViewDate = moment(calendarDisplayStates[index].date);
-                      if (
-                        calendarDisplayStates[index].view === 'day' &&
-                        momentDate.isSame(calendarViewDate, 'day')
-                      ) {
-                        className += ' active-day';
-                      }
-                      if (
-                        !isDayView &&
-                        selectedMonthIndex === index &&
-                        highlightedDate &&
-                        momentDate.isSame(highlightedDate, 'day')
-                      ) {
-                        className += ' highlighted-date';
-                      }
-                      if (
-                        !isDayView &&
-                        momentDate.isSame(calendarDisplayStates[index].date, 'month')
-                      ) {
-                        if (!momentDate.isBefore(now, 'day')) {
-                          className += ' selectable-day';
+                        const calendarViewDate = moment(calendarDisplayStates[index].date);
+                        if (
+                            calendarDisplayStates[index].view === 'day' &&
+                            momentDate.isSame(calendarViewDate, 'day')
+                        ) {
+                            className += ' active-day';
                         }
-                      }
+                        if (
+                            !isDayView &&
+                            selectedMonthIndex === index &&
+                            highlightedDate &&
+                            momentDate.isSame(highlightedDate, 'day')
+                        ) {
+                            className += ' highlighted-date';
+                        }
+                        if (
+                            !isDayView &&
+                            momentDate.isSame(calendarDisplayStates[index].date, 'month')
+                        ) {
+                            if (!momentDate.isBefore(now, 'day')) {
+                                className += ' selectable-day';
+                            }
+                        }
                     }
                     
                     return { className: className.trim() };
-                  };
+                };
                 return isVisible ? (
                     <div key={index} style={{ margin: '20px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '0 25px 10px' }}>
@@ -781,28 +825,37 @@ function App() {
                                 showMore: (total) => `+ ещё ${total}`,
                                 noEvents: 'Нет событий в этом диапазоне.',
                             }}
-                            slotPropGetter={(date, resourceId) => {
+                            slotPropGetter={(date, resourceId, isSelected) => {
                                 const momentDate = moment(date);
-                                const now = moment();
-                                if (calendarDisplayStates[index].view === 'day') {
-                                    const nowWithPadding = moment().subtract(1, 'minute');
-                                    if (momentDate.isBefore(nowWithPadding)) {
-                                        return { className: 'rbc-custom-slot past-slot', style: { cursor: 'not-allowed' } };
-                                    }
-                                    return { className: 'rbc-custom-slot', style: { cursor: 'pointer' } };
+                                let className = 'rbc-custom-slot';
+                                
+                                const isTimeColumn = resourceId === undefined;
+                                const isPast = momentDate.isBefore(moment(), 'hour');
+                                
+                                // Добавляем класс для прошедшего времени
+                                if (isPast) {
+                                  className += ' rbc-past-slot';
                                 }
-
-                                if (!calendarDisplayStates.some(state => state.view === 'day')) {
-                                    const calendarViewDate = moment(calendarDisplayStates[index].date);
-                                    if (momentDate.isBefore(now, 'day')) {
-                                        return { className: 'past-day' };
-                                    }
-                                    if (!momentDate.isBefore(now, 'day')) {
-                                        return { className: 'selectable-day' };
-                                    }
+                                
+                                if (!isTimeColumn && selectedSlot) {
+                                  const isInSelectedRange = momentDate.isBetween(
+                                    moment(selectedSlot.start),
+                                    moment(selectedSlot.end),
+                                    null,
+                                    '[)'
+                                  );
+                                  
+                                  if (isInSelectedRange) {
+                                    className += ' rbc-selected-slot';
+                                  }
                                 }
-                                return { className: 'rbc-custom-slot' };
-                            }}
+                                
+                                if (isTimeColumn) {
+                                  className += ' rbc-time-column-slot';
+                                }
+                                
+                                return { className };
+                              }}
                         />
 
                         {isFormVisible && selectedMonthIndex === index && (
@@ -857,6 +910,7 @@ function App() {
                                                 placeholder="гггг-мм-дд чч:mm"
                                                 value={eventStart}
                                                 onChange={handleStartDateChange}
+                                                onFocus={() => updateCalendarSelection(eventStart, eventEnd)}
                                                 className={(eventStartError) ? 'input-error' : ''}
                                             />
                                             {eventStartError && <p className="error-message">{eventStartError}</p>}
@@ -868,6 +922,7 @@ function App() {
                                                 placeholder="гггг-мм-дд чч:mm"
                                                 value={eventEnd}
                                                 onChange={handleEndDateChange}
+                                                onFocus={() => updateCalendarSelection(eventStart, eventEnd)}
                                                 className={(eventEndError) ? 'input-error' : ''}
                                             />
                                             {eventEndError && <p className="error-message">{eventEndError}</p>}

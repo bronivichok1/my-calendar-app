@@ -81,7 +81,7 @@ const Instruction = () => {
 
         <div className="instruction-footer">
           <button className="start-button"
-          onClick={() => navigate('/auth')}
+          onClick={() => navigate('/rooms')}
           >Записаться</button>
         </div>
       </div>

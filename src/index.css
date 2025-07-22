@@ -740,14 +740,17 @@ button {
 }
 
 .input-error {
-  border: 2px solid rgb(241, 96, 96)!important;
+  border: 2px solid rgb(241, 96, 96);
   box-shadow: 0 0 5px red;
   background-color: #ffffff;
+  outline: none; 
 }
+
 .input-error:focus {
-  border:none;
+  border: 2px solid rgb(241, 96, 96); 
   box-shadow: 0 0 5px red;
   background-color: #ffffff;
+  outline: none; 
 }
 
 .error-message {
@@ -813,3 +816,59 @@ button {
     padding: 1px 0 1px 3px;
   }
 }
+
+.rbc-selected-slot {
+  background-color: rgba(155, 155, 155, 0.795) !important;
+  border: none!important;
+}
+
+.rbc-time-column-slot {
+  pointer-events: none;
+  background-color: transparent !important;
+}
+
+.rbc-time-header .rbc-time-content {
+  pointer-events: none;
+}
+
+.rbc-time-content .rbc-timeslot-group {
+  pointer-events: none;
+  background-color: transparent !important;
+}
+
+.rbc-time-view .rbc-selected-slot {
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+.rbc-time-view .rbc-time-content .rbc-past-slot {
+  background-color: #c0c0c0;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+.help-button {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.help-button:hover {
+  transform: scale(1.1);
+  background-color: #1565c0;
+}
+
+
