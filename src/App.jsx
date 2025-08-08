@@ -965,7 +965,7 @@ function App() {
             />
             <Modal
                 isOpen={helpModalOpen}
-                message="Для удаления события нажмите на него, если у вас не хватает прав обратитесь в '' по телефону +375."
+                message="Для удаления события нажмите на него, если у вас не хватает прав обратитесь по телефону 364-26-07."
                 onClose={handleCloseHelpModal}
                 showCancelButton={false}
             />
