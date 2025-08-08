@@ -6,6 +6,7 @@ import App from './App';
 import RoomsList from './RoomsList'
 import Auth from './Auth'
 import Instruction from './Instructions';
+import RoomsPage from './RoomsPage';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -15,6 +16,7 @@ root.render(
     <Route path="/rooms" element={<RoomsList />}/>
     <Route path="/auth" element={<Auth />}/>
     <Route path="/instruction" element={<Instruction />}/>
+    <Route path="/videokonferentssvyaz" element={<RoomsPage/>}/>
     </Routes>
     </BrowserRouter>
 );

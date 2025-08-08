@@ -670,11 +670,17 @@ function App() {
                 
                 <div className="header">
                     <button
+                        onClick={() => navigate('/videokonferentssvyaz')}
+                        className="room-list-button"
+                    >
+                        Главная
+                    </button>
+                    {/*<button
                         onClick={() => navigate('/rooms')}
                         className="room-list-button"
                     >
                         Список кабинетов
-                    </button>
+                    </button>*/}
                     <h1 className="header-title">
                         {number == 6 ? 'Совет университета' : `Кабинет №${number}`}
                     </h1>

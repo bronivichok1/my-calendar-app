@@ -8,7 +8,7 @@ const Auth = () => {
   const [error, setError] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
   const loginUrl = `${apiUrl}/auth/login`;
-  const roomListUrl = '/rooms';
+  const roomListUrl = '/videokonferentssvyaz';
   
   const navigate = useNavigate(); 
 
