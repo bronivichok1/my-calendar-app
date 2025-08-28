@@ -13,7 +13,7 @@
   .support-line1, .support-line2 {
     margin: 10px 0;
     line-height: 1.6;
-    font-size: 16px;
+    font-size: 20px;
   }
   
   .support-phone {
@@ -54,7 +54,7 @@
     text-align: left;
     color: #34495e;
     padding-left: 5px;
-    font-size: 16px;
+    font-size: 20px;
   }
   
   .divider {
@@ -74,7 +74,7 @@
     border: none;
     border-radius: 15px;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 18px;
     flex: 1;
     transition: all 0.2s ease;
     white-space: nowrap;
@@ -112,7 +112,7 @@
   
   .warning-text {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
     margin: 10px 0;
     line-height: 1.5;
   }
@@ -128,7 +128,7 @@
     color: white;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -174,7 +174,7 @@
     padding: 10px 20px;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 20px;
     cursor: pointer;
     transition: all 0.3s ease;
     background-color: #474747; /* Нежный голубой */
@@ -189,7 +189,7 @@
     padding: 10px 20px;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 20px;
     cursor: pointer;
     transition: all 0.3s ease;
     background-color: #ff6b6b; /* Красный цвет */
