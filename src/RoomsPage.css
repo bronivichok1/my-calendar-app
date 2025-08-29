@@ -267,11 +267,12 @@
 }
 
 .status-indicator.active {
-  background-color: #4CAF50; /* Зеленый для активного статуса */
+  background-color: #F44336; /* Красный для неактивного статуса */
 }
 
 .status-indicator.inactive {
-  background-color: #F44336; /* Красный для неактивного статуса */
+  background-color: #4CAF50; /* Зеленый для активного статуса */
+
 }
 
 .status-indicator:hover + .status-tooltip,

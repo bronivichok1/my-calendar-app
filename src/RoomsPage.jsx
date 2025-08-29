@@ -215,8 +215,8 @@ const RoomsPage = () => {
                   {hasEvent && (
                     <div className="status-tooltip">
                       <div className="tooltip-content">
-                        <p><strong>Событие:</strong> { status.title}</p>
-                        {status.titleorg && <p><strong>Организатор:</strong> {status.name}</p>}
+                        <p><strong>Мероприятие:</strong> { status.title}</p>
+                        {status.titleorg && <p><strong>Ведущий:</strong> {status.name}</p>}
                         <p>
                           <strong>Время:</strong> 
                           {new Date(status.start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - 
@@ -225,6 +225,14 @@ const RoomsPage = () => {
                       </div>
                     </div>
                   )}
+                  {!hasEvent && (
+                    <div className="status-tooltip">
+                      <div className="tooltip-content">
+                        <p><strong>Кабинет свободен</strong> { status.title}</p>              
+                      </div>
+                    </div>
+                  )}
+                  
                 </div>
               </div>
               <div className="divider"></div>
