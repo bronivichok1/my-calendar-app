@@ -15,9 +15,9 @@ const Auth = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     let finalUsername = username;
-
-    if (!username.includes('@')) {
-      finalUsername = `${username}@bsmu.by`;
+    
+    if (finalUsername.includes('@')) {
+      finalUsername = finalUsername.split('@')[0];
     }
 
     setError('');
